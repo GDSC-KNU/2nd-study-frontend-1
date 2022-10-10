@@ -24,7 +24,7 @@ body {
   padding: 0.5em 2em;
   background-color: #aaaaaa;
 
-  /* box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.2); */
+  box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.2);
 }
 
 .navbar a {
@@ -52,14 +52,14 @@ body {
   --progressPercent: "0px";
   background-color: #333;
   width: 0%;
-  height: 5px;
+  height: 0.25rem;
   display: block;
 }
 
 .navbar__progress-bar::after {
   position: absolute;
   content: var(--progressPercent);
-  margin-top: 5px;
+  margin-top: 0.25rem;
   right: 0;
   background-color: white;
   padding: 0.5em;
@@ -79,13 +79,15 @@ body {
 
 .container {
   /* https://baymard.com/blog/line-length-readability */
+  font-size: 20px;
   max-width: 60ch;
   margin: 0 auto;
   padding-inline: 1em;
+  padding-block: 2em;
 }
 
 .container-bordered {
-  border: red 1px solid;
+  border: red 0.125rem solid;
 }
 
 .container__title {
