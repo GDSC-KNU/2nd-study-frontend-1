@@ -1,0 +1,99 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #eeeeee;
+  font-family: sans-serif;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+
+  padding: 0.5em 2em;
+  background-color: #aaaaaa;
+
+  /* box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.2); */
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+}
+
+.logo {
+  font-size: 3em;
+}
+
+.navbar__link-wrapper {
+  display: flex;
+  gap: 1em;
+
+  list-style: none;
+}
+
+.navbar__link {
+  font-size: 1.25em;
+}
+
+.navbar__progress-bar {
+  position: absolute;
+  --progressPercent: "0px";
+  background-color: #333;
+  width: 0%;
+  height: 5px;
+  display: block;
+}
+
+.navbar__progress-bar::after {
+  position: absolute;
+  content: var(--progressPercent);
+  margin-top: 5px;
+  right: 0;
+  background-color: white;
+  padding: 0.5em;
+}
+
+.hero-wrapper {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero {
+  object-fit: cover;
+  height: 400px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.container {
+  /* https://baymard.com/blog/line-length-readability */
+  max-width: 60ch;
+  margin: 0 auto;
+  padding-inline: 1em;
+}
+
+.container__header {
+  padding-top: 2em;
+}
+
+.container__content {
+  padding: 2em 0em;
+  line-height: 1.5;
+}
+
+.footer {
+  padding: 1em 0em;
+  text-align: center;
+}
