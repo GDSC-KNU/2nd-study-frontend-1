@@ -84,12 +84,26 @@ body {
   padding-inline: 1em;
 }
 
-.container__header {
-  padding-top: 2em;
+.container-bordered {
+  border: red 1px solid;
+}
+
+.container__title {
+  padding-block: 2em 0.5em;
+  font-size: 3em;
+}
+
+.container__subtitle {
+  padding-block: 1em 0.5em;
+  font-size: 2em;
+}
+
+.container__heading {
+  padding-block: 0.5em 0.5em;
+  font-size: 1.5em;
 }
 
 .container__content {
-  padding: 2em 0em;
   line-height: 1.5;
 }
 

@@ -35,8 +35,8 @@ function setProgressBar(progress) {
 function useProgressBar() {
   const navbarHeight = document.querySelector('.navbar').clientHeight;
 
-  const scrollPosFromTargetContentTop = getScrollPositionFromTargetContentTop('.container', navbarHeight);
-  const HeightOfTargetContent = getHeightOfTargetContent('.container', navbarHeight);
+  const scrollPosFromTargetContentTop = getScrollPositionFromTargetContentTop('.container-bordered', navbarHeight);
+  const HeightOfTargetContent = getHeightOfTargetContent('.container-bordered', navbarHeight);
 
   const progress = getScrollPercent(scrollPosFromTargetContentTop, HeightOfTargetContent);
 
