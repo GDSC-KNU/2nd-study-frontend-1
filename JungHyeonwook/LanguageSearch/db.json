@@ -1,0 +1,12 @@
+{
+  "languages": [
+    { "id": 1, "keyword": "Java", "author": "author1" },
+    { "id": 2, "keyword": "Javascript", "author": "author2" },
+    { "id": 3, "keyword": "JavaFX Script", "author": "author2" },
+    { "id": 4, "keyword": "Python", "author": "author2" },
+    { "id": 5, "keyword": "Elixir", "author": "author2" },
+    { "id": 2, "keyword": "PHP", "author": "author2" }
+  ],
+  "comments": [{ "id": 1, "body": "some comment", "postId": 1 }],
+  "profile": { "name": "typicode" }
+}

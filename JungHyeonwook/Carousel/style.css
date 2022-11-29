@@ -1,0 +1,33 @@
+#main {
+  overflow: hidden;
+}
+
+#slider {
+  width: 500%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  transition: 150ms ease-in-out;
+}
+
+.controller {
+  z-index: 20;
+  position: absolute;
+  top: 540px;
+  left: 50%;
+  display: flex;
+  cursor: pointer;
+}
+
+.slider_item {
+  width: 100%;
+  height: 500px;
+}
+
+.slider_item:nth-child(odd) {
+  background-color: burlywood;
+}
+
+.slider_item:nth-child(even) {
+  background-color: aquamarine;
+}
