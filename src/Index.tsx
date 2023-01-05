@@ -10,8 +10,8 @@ interface IPostProps {
 
 const posts: Array<IPostProps> = [
   {
-    title: "Algorithm 1",
-    content: "Algorithm 1 visualized by",
+    title: "B+-Tree",
+    content: "B+-Tree visualized by",
     author: "Chaejun Lee",
     githubId: "chaejunlee",
     link: "chaejunlee",
@@ -49,7 +49,7 @@ const Index = () => {
               key={link}
               className="flex w-full flex-col gap-4 rounded-md border-2 border-gray-400 p-4 shadow-md"
             >
-              <h2 className="text-2xl">{title}</h2>
+              <h2 className="text-3xl font-bold">{title}</h2>
               <a
                 href={link}
                 className="flex min-h-[200px] w-full items-center justify-center rounded-md bg-green-300 text-gray-800"
