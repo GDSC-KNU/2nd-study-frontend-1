@@ -90,3 +90,16 @@
   border-top-width: 2px;
   border-color: var(--dark);
 }
+
+.mount1 {
+  animation: 2s ease-in-out loadEffect1;
+}
+
+@keyframes loadEffect1 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

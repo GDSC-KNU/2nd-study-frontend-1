@@ -30,7 +30,6 @@ function convert(arr: any, i: any) {
     root.left = convert(arr, 2 * i + 1);
     root.right = convert(arr, 2 * i + 2);
   }
-  console.log(root);
   return root;
 }
 
