@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { convert } from "./BinaryTree";
 import "./styles.css";
+import Dropdown from "./Dropdown";
 
 interface Node {
   data: number;
@@ -12,6 +13,8 @@ const Hyeonwook = () => {
   const [inputArray, setInputArray] = useState("");
   const [addInputArray, setAddInputArray] = useState("");
   const [binaryTreeArray, setBinaryTreeArray] = useState<String[]>();
+
+  const [dropdownVisibility, setDropdownVisibility] = useState(false);
 
   const onSubmitHandler = (e: any) => {
     e.preventDefault();
@@ -25,6 +28,15 @@ const Hyeonwook = () => {
     let temp = addInputArray.split(",");
     setBinaryTreeArray([...(binaryTreeArray || [""]), ...(temp || [""])]);
     setAddInputArray("");
+  };
+
+  const removeHandler = (e: any) => {
+    let value = e.target.innerHTML;
+    let id = e.target.parentElement.id;
+    console.log(id);
+
+    let temp = binaryTreeArray?.filter((v) => v !== value);
+    setBinaryTreeArray(temp?.length === 0 ? [""] : temp);
   };
 
   const renderBinaryTree: any = (node: Node) => {
@@ -68,8 +80,12 @@ const Hyeonwook = () => {
       <div
         key={data}
         className=" mount1 flex flex-col items-center justify-center"
+        id={data}
       >
-        <div className=" h-10 min-w-[60px] max-w-fit rounded-xl bg-purple-200 text-center leading-10">
+        <div
+          onClick={removeHandler}
+          className=" h-10 min-w-[60px] max-w-fit rounded-xl bg-black text-center leading-10 text-white"
+        >
           {data || "null"}
         </div>
         {left || right ? (
@@ -109,8 +125,11 @@ const Hyeonwook = () => {
   };
 
   return (
-    <div className=" m-4 ">
-      <div>
+    <div className="m-0 min-h-[100vh] border-[40px] border-black p-6">
+      <button onClick={(e) => setDropdownVisibility(!dropdownVisibility)}>
+        Menu
+      </button>
+      <Dropdown visibility={dropdownVisibility}>
         <ul>
           <li>
             <form onSubmit={onSubmitHandler}>
@@ -119,37 +138,46 @@ const Hyeonwook = () => {
                 placeholder="숫자배열을 입력하세요"
                 value={inputArray}
                 onChange={(e) => setInputArray(e.target.value)}
+                className=" w-60"
               ></input>
-              <button type="submit">button</button>
+              <button className=" ml-2" type="submit">
+                Set
+              </button>
             </form>
           </li>
           <li>
             <form onSubmit={addHandler}>
               <input
                 type="text"
-                placeholder="추가할 숫자나 배열을 입력하세요"
+                placeholder="숫자나 배열을 입력하세요"
                 value={addInputArray}
                 onChange={(e) => setAddInputArray(e.target.value)}
+                className=" w-60"
               ></input>
-              <button type="submit">button</button>
+              <button className=" ml-2" type="submit">
+                Add
+              </button>
             </form>
           </li>
           <li>
-            <a onClick={() => ""}>Remove</a>
-          </li>
-          <li>
-            <a onClick={() => setBinaryTreeArray([""])}>Clear</a>
+            <a
+              className=" cursor-pointer"
+              onClick={() => setBinaryTreeArray([""])}
+            >
+              Clear
+            </a>
           </li>
           <li>Menu5</li>
         </ul>
-      </div>
-      <div className=" ">
-        <h1 className=" text-center text-4xl">Binary Tree</h1>
-        <div className="h">
-          <div className="tree">
+      </Dropdown>
+      <div className="">
+        <h1 className=" text-center text-4xl">
+          Level-Order Array to Binary Tree
+        </h1>
+        <div className=" mt-10">
+          {/* <div className="tree">
             {renderBinaryTree(convert(binaryTreeArray || [null], 0))}
-          </div>
-
+          </div> */}
           {renderBinaryTree2(convert(binaryTreeArray || [null], 0))}
         </div>
       </div>

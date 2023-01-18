@@ -9,18 +9,18 @@ class Node {
   }
 }
 
-class BinaryTree {
-  root: any;
-  constructor(converted: any) {
-    this.root = converted;
-  }
+// class BinaryTree {
+//   root: any;
+//   constructor(converted: any) {
+//     this.root = converted;
+//   }
 
-  remove() {}
+//   remove() {}
 
-  add() {}
+//   add() {}
 
-  print() {}
-}
+//   print() {}
+// }
 
 function convert(arr: any, i: any) {
   let root = null;
@@ -33,9 +33,15 @@ function convert(arr: any, i: any) {
   return root;
 }
 
+function remove() {
+  let root = null;
+
+  return null;
+}
+
 let arr = [1, 2, 3, 4, 5, 6, 7];
 let converted = convert(arr, 0);
 
-let BT = new BinaryTree(converted);
+// let BT = new BinaryTree(converted);
 
-export { BinaryTree, convert };
+export { convert };
