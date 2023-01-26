@@ -1,4 +1,10 @@
-import { createContext, ReactElement, useContext, useState } from "react";
+import {
+  createContext,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import MainLayout from "../layouts/MainLayout";
 
 type TBlockStatus = "EMPTY" | "VISITED" | "BLOCKED" | "ACTIVE";
@@ -222,12 +228,30 @@ function SetMazeButton({
 
 function DFSButton() {
   const { board, setBoard } = { ...useContext(BoardContext) } as IBoardContext;
+  const [start, setStart] = useState(false);
+
+  useEffect(() => {
+    if (start) {
+      setBoard(randomDFS);
+      const timer = setInterval(() => {
+        setBoard(randomDFS);
+      }, 500);
+      return () => clearInterval(timer);
+    }
+  }, [start]);
+
+  useEffect(() => {
+    const lastPoint = board.deque[board.deque.length - 1];
+    if (lastPoint.x === board.columns - 1 && lastPoint.y === board.rows - 1) {
+      setStart(false);
+    }
+  }, [board.deque]);
 
   return (
     <button
       type="button"
       className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
-      onClick={() => randomDFS({ board, setBoard })}
+      onClick={() => setStart((prev) => !prev)}
     >
       DFS
     </button>
@@ -241,22 +265,17 @@ const directions = [
   { dir: "LEFT", x: -1, y: 0 },
 ] as const;
 
-function randomDFS(context: IBoardContext) {
-  const {
-    rows,
-    columns,
-    maze,
-    deque: stack,
-  } = {
-    ...context.board,
-  };
+function randomDFS(prev: IBoard) {
+  const stack = prev.deque;
+  const maze = deepCopy2DArray(prev);
+  const rows = maze.length;
+  const columns = maze[0].length;
   const lastPoint = stack[stack.length - 1];
 
   while (stack.length) {
-    console.log(stack);
     const currentPoint = stack[stack.length - 1];
     const isEnd = currentPoint.x === columns - 1 && currentPoint.y === rows - 1;
-    if (isEnd) return;
+    if (isEnd) return prev;
     let nextPoint = currentPoint;
 
     for (const option of directions) {
@@ -275,22 +294,20 @@ function randomDFS(context: IBoardContext) {
         maze[nextPoint.y][nextPoint.x] === "ACTIVE";
       const blocked = maze[nextPoint.y][nextPoint.x] === "BLOCKED";
       if (!visited && !blocked) {
-        context.setBoard((prev) => {
-          const newBoard = deepCopy2DArray(prev);
-          newBoard[lastPoint.y][lastPoint.x] = "VISITED";
-          newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
-          return {
-            ...prev,
-            maze: newBoard,
-            currentPoint: nextPoint,
-            deque: [...stack, nextPoint],
-          };
-        });
-        return;
+        const newBoard = deepCopy2DArray(prev);
+        newBoard[lastPoint.y][lastPoint.x] = "VISITED";
+        newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
+        return {
+          ...prev,
+          maze: newBoard,
+          currentPoint: nextPoint,
+          deque: [...stack, nextPoint],
+        };
       }
     }
     stack.pop();
   }
+  return prev;
 }
 
 export default Chaejun;
