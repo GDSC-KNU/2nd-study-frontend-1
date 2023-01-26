@@ -37,64 +37,6 @@ interface IBoardContext {
 }
 const BoardContext = createContext<IBoardContext | null>(null);
 
-const Chaejun = () => {
-  const [board, setBoard] = useState<IBoard>({
-    rows: 5,
-    columns: 5,
-    maze: [
-      ["VISITED", "EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-      ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-      ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-      ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-      ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-    ],
-    currentPoint: { x: 0, y: 0 },
-    deque: [{ x: 0, y: 0 }],
-  });
-
-  return (
-    <MainLayout>
-      <BoardContext.Provider value={{ board, setBoard }}>
-        <h1 className="text-4xl font-bold">DFS/BFS</h1>
-        <form
-          className="flex flex-col gap-2 py-4"
-          // onSubmit={(e) => {
-          //   e.preventDefault();
-          // }}
-        >
-          <div className="flex flex-row gap-2">
-            <NumberInput
-              props={{ label: "columns", board, setBoard }}
-              onChange={(e) => {
-                initializeBoard(setBoard, board.rows, safeInput(e));
-              }}
-            />
-            <div className="grow">
-              <NumberInput
-                props={{ label: "rows", board, setBoard }}
-                onChange={(e) => {
-                  initializeBoard(setBoard, safeInput(e), board.columns);
-                }}
-              />
-            </div>
-          </div>
-          <div className="flex flex-row gap-2">
-            <SetMazeButton setBoard={setBoard} />
-            <DFSButton />
-            <button className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white">
-              BFS
-            </button>
-          </div>
-        </form>
-        <h2 className="text-2xl font-bold">Board</h2>
-        <div className="block rounded-md border-2 border-black p-3">
-          <Table />
-        </div>
-      </BoardContext.Provider>
-    </MainLayout>
-  );
-};
-
 function deepCopy2DArray(prev: IBoard) {
   return prev.maze.map((row) => row.slice());
 }
@@ -111,7 +53,7 @@ function initializeBoard(
   setBoard((prev) => {
     const newBoard = create2DArray(rows, columns);
     newBoard[0][0] = "VISITED";
-    return { ...prev, rows, columns, maze: newBoard };
+    return { ...prev, rows, columns, maze: newBoard, deque: [{ x: 0, y: 0 }] };
   });
 }
 
@@ -168,7 +110,7 @@ function Table(): ReactElement {
                 return (
                   <td
                     className={`border-2 border-black ${blockStyle[block]} ${
-                      (isStart || isEnd) && "bg-blue-400"
+                      isStart || isEnd ? "bg-blue-400" : ""
                     }`}
                     key={propsKey}
                     onClick={() => {
@@ -180,7 +122,7 @@ function Table(): ReactElement {
                       });
                     }}
                   >
-                    <div className="aspect-square w-20">{block}</div>
+                    <div className="aspect-square w-8"></div>
                   </td>
                 );
               })}
@@ -226,38 +168,6 @@ function SetMazeButton({
   );
 }
 
-function DFSButton() {
-  const { board, setBoard } = { ...useContext(BoardContext) } as IBoardContext;
-  const [start, setStart] = useState(false);
-
-  useEffect(() => {
-    if (start) {
-      setBoard(randomDFS);
-      const timer = setInterval(() => {
-        setBoard(randomDFS);
-      }, 500);
-      return () => clearInterval(timer);
-    }
-  }, [start]);
-
-  useEffect(() => {
-    const lastPoint = board.deque[board.deque.length - 1];
-    if (lastPoint.x === board.columns - 1 && lastPoint.y === board.rows - 1) {
-      setStart(false);
-    }
-  }, [board.deque]);
-
-  return (
-    <button
-      type="button"
-      className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
-      onClick={() => setStart((prev) => !prev)}
-    >
-      DFS
-    </button>
-  );
-}
-
 const directions = [
   { dir: "DOWN", x: 0, y: 1 },
   { dir: "RIGHT", x: 1, y: 0 },
@@ -265,21 +175,21 @@ const directions = [
   { dir: "LEFT", x: -1, y: 0 },
 ] as const;
 
-function randomDFS(prev: IBoard) {
-  const stack = prev.deque;
-  const maze = deepCopy2DArray(prev);
-  const rows = maze.length;
-  const columns = maze[0].length;
+function DFS(prev: IBoard) {
+  const stack = [...prev.deque];
+  const newBoard = deepCopy2DArray(prev);
+  const rows = newBoard.length;
+  const columns = newBoard[0].length;
   const lastPoint = stack[stack.length - 1];
+  console.log("stack", stack);
 
   while (stack.length) {
     const currentPoint = stack[stack.length - 1];
     const isEnd = currentPoint.x === columns - 1 && currentPoint.y === rows - 1;
     if (isEnd) return prev;
-    let nextPoint = currentPoint;
 
     for (const option of directions) {
-      nextPoint = {
+      const nextPoint = {
         x: currentPoint.x + option.x,
         y: currentPoint.y + option.y,
       };
@@ -290,11 +200,11 @@ function randomDFS(prev: IBoard) {
         nextPoint.y >= rows;
       if (outOfBoard) continue;
       const visited =
-        maze[nextPoint.y][nextPoint.x] === "VISITED" ||
-        maze[nextPoint.y][nextPoint.x] === "ACTIVE";
-      const blocked = maze[nextPoint.y][nextPoint.x] === "BLOCKED";
+        newBoard[nextPoint.y][nextPoint.x] === "VISITED" ||
+        newBoard[nextPoint.y][nextPoint.x] === "ACTIVE";
+      const blocked = newBoard[nextPoint.y][nextPoint.x] === "BLOCKED";
       if (!visited && !blocked) {
-        const newBoard = deepCopy2DArray(prev);
+        newBoard[currentPoint.y][currentPoint.x] = "VISITED";
         newBoard[lastPoint.y][lastPoint.x] = "VISITED";
         newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
         return {
@@ -309,5 +219,291 @@ function randomDFS(prev: IBoard) {
   }
   return prev;
 }
+
+function DFSButton() {
+  const { board, setBoard } = { ...useContext(BoardContext) } as IBoardContext;
+  const [start, setStart] = useState(false);
+
+  useEffect(() => {
+    if (start) {
+      // setBoard(DFS);
+      const timer = setInterval(() => {
+        setBoard(DFS);
+      }, 500);
+      return () => clearInterval(timer);
+    }
+  }, [start]);
+
+  useEffect(() => {
+    const endStatus = board.maze[board.rows - 1][board.columns - 1];
+    if (endStatus === "ACTIVE") {
+      setStart(false);
+    }
+  }, [board.maze]);
+
+  return (
+    <button
+      type="button"
+      className={`grow rounded-md border-2 border-black py-2 px-3 text-white ${
+        start ? "bg-yellow-400 text-black" : "bg-gray-600"
+      }`}
+      onClick={() => {
+        setStart((prev) => !prev);
+      }}
+    >
+      DFS
+    </button>
+  );
+}
+
+function BFS(prev: IBoard) {
+  const queue = [...prev.deque];
+  const newBoard = deepCopy2DArray(prev);
+  const rows = newBoard.length;
+  const columns = newBoard[0].length;
+  const currentQueue = [];
+
+  while (queue.length) {
+    const currentPoint = queue[0];
+    queue.shift();
+
+    const isEnd = currentPoint.x === columns - 1 && currentPoint.y === rows - 1;
+    if (isEnd) return prev;
+
+    newBoard[currentPoint.y][currentPoint.x] = "VISITED";
+    for (const option of directions) {
+      const nextPoint = {
+        x: currentPoint.x + option.x,
+        y: currentPoint.y + option.y,
+      };
+      const outOfBoard =
+        nextPoint.x < 0 ||
+        nextPoint.x >= columns ||
+        nextPoint.y < 0 ||
+        nextPoint.y >= rows;
+      if (outOfBoard) continue;
+      const visited =
+        newBoard[nextPoint.y][nextPoint.x] === "VISITED" ||
+        newBoard[nextPoint.y][nextPoint.x] === "ACTIVE";
+      const blocked = newBoard[nextPoint.y][nextPoint.x] === "BLOCKED";
+      if (!visited && !blocked) {
+        newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
+        currentQueue.push(nextPoint);
+      }
+    }
+  }
+  return { ...prev, maze: newBoard, deque: [...currentQueue] };
+}
+
+function BFSButton() {
+  const { board, setBoard } = { ...useContext(BoardContext) } as IBoardContext;
+  const [start, setStart] = useState(false);
+
+  useEffect(() => {
+    if (start) {
+      const timer = setInterval(() => {
+        setBoard(BFS);
+      }, 500);
+      return () => clearInterval(timer);
+    }
+  }, [start]);
+
+  useEffect(() => {
+    const endStatus = board.maze[board.rows - 1][board.columns - 1];
+    if (endStatus === "ACTIVE") {
+      setStart(false);
+    }
+  }, [board.maze]);
+
+  return (
+    <button
+      type="button"
+      className={`grow rounded-md border-2 border-black py-2 px-3 text-white ${
+        start ? "bg-yellow-400 text-black" : "bg-gray-600"
+      }`}
+      onClick={() => {
+        setStart((prev) => !prev);
+      }}
+    >
+      BFS
+    </button>
+  );
+}
+
+const Chaejun = () => {
+  const [board, setBoard] = useState<IBoard>({
+    rows: 10,
+    columns: 10,
+    maze: [
+      [
+        "VISITED",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+      [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+      ],
+    ],
+    currentPoint: { x: 0, y: 0 },
+    deque: [{ x: 0, y: 0 }],
+  });
+
+  return (
+    <MainLayout>
+      <BoardContext.Provider value={{ board, setBoard }}>
+        <h1 className="text-4xl font-bold">DFS/BFS</h1>
+        <form
+          className="flex flex-col gap-2 py-4"
+          // onSubmit={(e) => {
+          //   e.preventDefault();
+          // }}
+        >
+          <div className="grid grid-cols-2 gap-2">
+            <NumberInput
+              props={{ label: "columns", board, setBoard }}
+              onChange={(e) => {
+                initializeBoard(setBoard, board.rows, safeInput(e));
+              }}
+            />
+            <NumberInput
+              props={{ label: "rows", board, setBoard }}
+              onChange={(e) => {
+                initializeBoard(setBoard, safeInput(e), board.columns);
+              }}
+            />
+            <button
+              type="button"
+              className="grow rounded-md border-2 border-black"
+              onClick={() =>
+                initializeBoard(setBoard, board.rows, board.columns)
+              }
+            >
+              Reset
+            </button>
+            <SetMazeButton setBoard={setBoard} />
+            <DFSButton />
+            <BFSButton />
+          </div>
+        </form>
+        <h2 className="text-2xl font-bold">Board</h2>
+        <div className="block rounded-md border-2 border-black p-3">
+          <Table />
+        </div>
+      </BoardContext.Provider>
+    </MainLayout>
+  );
+};
 
 export default Chaejun;
