@@ -8,6 +8,7 @@ interface IBoard {
   columns: number;
   maze: TBlockStatus[][];
   currentPoint: { x: number; y: number };
+  deque: { x: number; y: number }[];
 }
 
 const blockStyle = {
@@ -42,6 +43,7 @@ const Chaejun = () => {
       ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"],
     ],
     currentPoint: { x: 0, y: 0 },
+    deque: [{ x: 0, y: 0 }],
   });
 
   return (
@@ -71,43 +73,8 @@ const Chaejun = () => {
             </div>
           </div>
           <div className="flex flex-row gap-2">
-            <button
-              type="button"
-              className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
-              onClick={() => {
-                setBoard((prev) => {
-                  const possiblyBlocked = () => {
-                    const randomNumber = Math.random();
-                    if (randomNumber > 0.3) return "EMPTY";
-                    return "BLOCKED";
-                  };
-                  const newBoard = deepCopy2DArray(prev);
-                  const rows = newBoard.length;
-                  const columns = newBoard[0].length;
-                  for (let i = 0; i < rows; i++) {
-                    for (let j = 0; j < columns; j++) {
-                      if (
-                        (i == 0 && j == 0) ||
-                        (i == 0 && j == 1) ||
-                        (i == 1 && j == 0) ||
-                        (i == rows - 1 && j == columns - 1)
-                      )
-                        newBoard[i][j] = "EMPTY";
-                      else newBoard[i][j] = possiblyBlocked();
-                    }
-                  }
-                  return { ...prev, maze: newBoard };
-                });
-              }}
-            >
-              Set Maze
-            </button>
-            <button
-              className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
-              onClick={() => randomDFS({ board, setBoard })}
-            >
-              DFS
-            </button>
+            <SetMazeButton setBoard={setBoard} />
+            <DFSButton />
             <button className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white">
               BFS
             </button>
@@ -115,13 +82,6 @@ const Chaejun = () => {
         </form>
         <h2 className="text-2xl font-bold">Board</h2>
         <div className="block rounded-md border-2 border-black p-3">
-          <div
-            className="divide-x-2 divide-y-2 divide-black"
-            style={{
-              gridTemplateColumns: `repeat(${board.columns}, 1fr)`,
-              display: "grid",
-            }}
-          ></div>
           <Table />
         </div>
       </BoardContext.Provider>
@@ -135,31 +95,6 @@ function deepCopy2DArray(prev: IBoard) {
 
 function safeInput(e: React.ChangeEvent<HTMLInputElement>): number {
   return Math.max(Number.parseInt(e.target.value), 1);
-}
-
-function NumberInput({
-  props,
-  onChange,
-}: {
-  props: {
-    label: string;
-    board: IBoard;
-    setBoard: React.Dispatch<React.SetStateAction<IBoard>>;
-  };
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}): ReactElement {
-  return (
-    <div className="grow">
-      <label className="block">label</label>
-      <input
-        className="w-full rounded-md border-2 border-black py-2 px-3"
-        type="number"
-        onChange={onChange}
-        value={props.board.columns}
-        min="0"
-      />
-    </div>
-  );
 }
 
 function initializeBoard(
@@ -178,9 +113,40 @@ function create2DArray(rows: number, columns: number) {
   return Array.from(Array(rows), () => new Array(columns).fill("EMPTY"));
 }
 
+function randomlyBlockOrEmpty() {
+  const randomNumber = Math.random();
+  if (randomNumber > 0.3) return "EMPTY";
+  return "BLOCKED";
+}
+
+function NumberInput({
+  props,
+  onChange,
+}: {
+  props: {
+    label: "columns" | "rows";
+    board: IBoard;
+    setBoard: React.Dispatch<React.SetStateAction<IBoard>>;
+  };
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}): ReactElement {
+  return (
+    <div className="grow">
+      <label className="block">{props.label}</label>
+      <input
+        className="w-full rounded-md border-2 border-black py-2 px-3"
+        type="number"
+        onChange={onChange}
+        value={props.board[props.label]}
+        min="0"
+      />
+    </div>
+  );
+}
+
 function Table(): ReactElement {
-  const context = useContext(BoardContext);
-  const { board, setBoard } = { ...context } as IBoardContext;
+  const { board, setBoard } = { ...useContext(BoardContext) } as IBoardContext;
+
   return (
     <table className="mx-auto border-collapse">
       <tbody>
@@ -192,19 +158,18 @@ function Table(): ReactElement {
                 const isStart = rowId === 0 && blockId === 0;
                 const isEnd =
                   rowId === board.rows - 1 && blockId === board.columns - 1;
+                const isStartOrEnd = isStart || isEnd;
                 return (
                   <td
-                    className={`border-2 border-black
-                                      ${blockStyle[block]}
-                                      ${(isStart || isEnd) && "bg-blue-400"}`}
+                    className={`border-2 border-black ${blockStyle[block]} ${
+                      (isStart || isEnd) && "bg-blue-400"
+                    }`}
                     key={propsKey}
                     onClick={() => {
-                      if (isStart || isEnd) return;
+                      if (isStartOrEnd) return;
                       setBoard((prev) => {
                         const newBoard = deepCopy2DArray(prev);
-                        newBoard[rowId][blockId] = toggleState[
-                          block
-                        ] as TBlockStatus;
+                        newBoard[rowId][blockId] = toggleState[block];
                         return { ...prev, maze: newBoard };
                       });
                     }}
@@ -221,48 +186,111 @@ function Table(): ReactElement {
   );
 }
 
+function SetMazeButton({
+  setBoard,
+}: {
+  setBoard: React.Dispatch<React.SetStateAction<IBoard>>;
+}) {
+  return (
+    <button
+      type="button"
+      className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
+      onClick={() => {
+        setBoard((prev) => {
+          const newBoard = deepCopy2DArray(prev);
+          const rows = newBoard.length;
+          const columns = newBoard[0].length;
+          for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < columns; j++) {
+              const isStartOrEnd =
+                (i == 0 && j == 0) ||
+                (i == 0 && j == 1) ||
+                (i == 1 && j == 0) ||
+                (i == rows - 1 && j == columns - 1);
+              if (isStartOrEnd) continue;
+              else newBoard[i][j] = randomlyBlockOrEmpty();
+            }
+          }
+          return { ...prev, maze: newBoard };
+        });
+      }}
+    >
+      Set Maze
+    </button>
+  );
+}
+
+function DFSButton() {
+  const { board, setBoard } = { ...useContext(BoardContext) } as IBoardContext;
+
+  return (
+    <button
+      type="button"
+      className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
+      onClick={() => randomDFS({ board, setBoard })}
+    >
+      DFS
+    </button>
+  );
+}
+
 const directions = [
-  { dir: "UP", x: 0, y: -1 },
   { dir: "DOWN", x: 0, y: 1 },
-  { dir: "LEFT", x: -1, y: 0 },
   { dir: "RIGHT", x: 1, y: 0 },
+  { dir: "UP", x: 0, y: -1 },
+  { dir: "LEFT", x: -1, y: 0 },
 ] as const;
 
 function randomDFS(context: IBoardContext) {
-  const { rows, columns, maze, currentPoint } = {
+  const {
+    rows,
+    columns,
+    maze,
+    deque: stack,
+  } = {
     ...context.board,
   };
+  const lastPoint = stack[stack.length - 1];
 
-  if (currentPoint.x === columns - 1 && currentPoint.y === rows - 1) return;
-  console.log("current point:", currentPoint);
+  while (stack.length) {
+    console.log(stack);
+    const currentPoint = stack[stack.length - 1];
+    const isEnd = currentPoint.x === columns - 1 && currentPoint.y === rows - 1;
+    if (isEnd) return;
+    let nextPoint = currentPoint;
 
-  const IndexArray = [0, 1, 2, 3];
-  const randomIndexArray = IndexArray.sort(() => 0.5 - Math.random());
-
-  let nextPoint = currentPoint;
-  for (const randomIndex of randomIndexArray) {
-    const option = directions[randomIndex];
-    nextPoint = {
-      x: currentPoint.x + option.x,
-      y: currentPoint.y + option.y,
-    };
-    console.log(nextPoint);
-    const outOfBoard =
-      nextPoint.x < 0 ||
-      nextPoint.x >= rows ||
-      nextPoint.y < 0 ||
-      nextPoint.y >= columns;
-    if (outOfBoard) continue;
-    const visited = maze[nextPoint.y][nextPoint.x] === "VISITED";
-    const blocked = maze[nextPoint.y][nextPoint.x] === "BLOCKED";
-    if (!visited && !blocked) break;
+    for (const option of directions) {
+      nextPoint = {
+        x: currentPoint.x + option.x,
+        y: currentPoint.y + option.y,
+      };
+      const outOfBoard =
+        nextPoint.x < 0 ||
+        nextPoint.x >= columns ||
+        nextPoint.y < 0 ||
+        nextPoint.y >= rows;
+      if (outOfBoard) continue;
+      const visited =
+        maze[nextPoint.y][nextPoint.x] === "VISITED" ||
+        maze[nextPoint.y][nextPoint.x] === "ACTIVE";
+      const blocked = maze[nextPoint.y][nextPoint.x] === "BLOCKED";
+      if (!visited && !blocked) {
+        context.setBoard((prev) => {
+          const newBoard = deepCopy2DArray(prev);
+          newBoard[lastPoint.y][lastPoint.x] = "VISITED";
+          newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
+          return {
+            ...prev,
+            maze: newBoard,
+            currentPoint: nextPoint,
+            deque: [...stack, nextPoint],
+          };
+        });
+        return;
+      }
+    }
+    stack.pop();
   }
-  context.setBoard((prev) => {
-    const newBoard = deepCopy2DArray(prev);
-    newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
-    newBoard[currentPoint.y][currentPoint.x] = "VISITED";
-    return { ...prev, maze: newBoard, currentPoint: nextPoint };
-  });
 }
 
 export default Chaejun;
