@@ -10,16 +10,67 @@ class Node {
 }
 
 // class BinaryTree {
-//   root: any;
+//   root;
 //   constructor(converted: any) {
 //     this.root = converted;
 //   }
 
+//   getRoot() {
+//     return this.root;
+//   }
+
+//   dfs(node = this.root, values = []) {
+//     if (node.left) {
+//       this.dfs(node.left, values);
+//     }
+//     if (node.right) {
+//       this.dfs(node.right, values);
+//     }
+//     return values;
+//   }
+
 //   remove() {}
 
-//   add() {}
+//   set(converted: any) {
+//     this.root = converted;
+//   }
+
+//   add(value: number) {
+//     let newNode = new Node(value);
+//     if (!this.root) {
+//       this.root = newNode;
+//       return;
+//     }
+//     let current = this.root;
+//     while (true) {
+//       if (value < current.value) {
+//         if (!current.left) {
+//           current.left = newNode;
+//           return;
+//         }
+//         current = current.left;
+//       } else {
+//         if (!current.right) {
+//           current.right = newNode;
+//           return;
+//         }
+//         current = current.right;
+//       }
+//     }
+//   }
 
 //   print() {}
+
+//   convert(arr: any, i: any) {
+//     let root = null;
+
+//     if (i < arr.length) {
+//       root = new Node(arr[i]);
+//       root.left = convert(arr, 2 * i + 1);
+//       root.right = convert(arr, 2 * i + 2);
+//     }
+//     return root;
+//   }
 // }
 
 function convert(arr: any, i: any) {
@@ -32,16 +83,4 @@ function convert(arr: any, i: any) {
   }
   return root;
 }
-
-function remove() {
-  let root = null;
-
-  return null;
-}
-
-let arr = [1, 2, 3, 4, 5, 6, 7];
-let converted = convert(arr, 0);
-
-// let BT = new BinaryTree(converted);
-
 export { convert };

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { convert } from "./BinaryTree";
 import Dropdown from "../../components/Dropdown";
 
-interface Node {
-  data: number;
-  left: Object;
-  right: Object;
-}
+// interface Node {
+//   data: number;
+//   left: Object;
+//   right: Object;
+// }
 
 const Hyeonwook = () => {
   const [inputArray, setInputArray] = useState("");
@@ -33,48 +33,12 @@ const Hyeonwook = () => {
   const removeHandler = (e: any) => {
     let value = e.target.innerHTML;
     let id = e.target.parentElement.id;
-    console.log(id);
 
     let temp = binaryTreeArray?.filter((v) => v !== value);
     setBinaryTreeArray(temp?.length === 0 ? [""] : temp);
   };
 
-  const renderBinaryTree: any = (node: Node) => {
-    const { left, right, data } = node;
-    return (
-      <>
-        <>
-          <div className="node__element">{data || "null"}</div>
-          {left || right ? (
-            <>
-              <div className="node__bottom-line"></div>
-              <div className="node__children">
-                {left ? (
-                  <div className="node node--left">
-                    {renderBinaryTree(left)}
-                  </div>
-                ) : (
-                  ""
-                )}
-
-                {right ? (
-                  <div className="node node--right">
-                    {renderBinaryTree(right)}
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-            </>
-          ) : (
-            ""
-          )}
-        </>
-      </>
-    );
-  };
-
-  const renderBinaryTree2: any = (node: any) => {
+  const renderBinaryTree: any = (node: any) => {
     const { left, right, data } = node;
     return (
       <div
@@ -95,7 +59,7 @@ const Hyeonwook = () => {
               {left ? (
                 <div className=" relative ml-8 mr-2 flex flex-col items-center">
                   <span className=" mx-auto h-5 w-[1px] bg-gray-400"></span>
-                  {renderBinaryTree2(left)}
+                  {renderBinaryTree(left)}
                 </div>
               ) : (
                 <>
@@ -107,7 +71,7 @@ const Hyeonwook = () => {
                 <>
                   <div className=" relative mr-8 ml-2 flex  flex-col items-center">
                     <span className=" mx-auto h-5 w-[1px] bg-gray-400"></span>
-                    {renderBinaryTree2(right)}
+                    {renderBinaryTree(right)}
                   </div>
                 </>
               ) : (
@@ -216,10 +180,7 @@ const Hyeonwook = () => {
           Level-Order Array to Binary Tree
         </h1>
         <div className=" mt-10">
-          {/* <div className="tree">
-            {renderBinaryTree(convert(binaryTreeArray || [null], 0))}
-          </div> */}
-          {renderBinaryTree2(convert(binaryTreeArray || [null], 0))}
+          {renderBinaryTree(convert(binaryTreeArray || [null], 0))}
         </div>
       </div>
     </div>
