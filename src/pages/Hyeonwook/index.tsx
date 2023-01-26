@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { convert } from "./BinaryTree";
-import "./styles.css";
-import Dropdown from "./Dropdown";
+import Dropdown from "../../components/Dropdown";
 
 interface Node {
   data: number;
@@ -15,7 +14,8 @@ const Hyeonwook = () => {
   const [binaryTreeArray, setBinaryTreeArray] = useState<String[]>();
 
   const [dropdownVisibility, setDropdownVisibility] = useState(false);
-
+  const [dropdownVisibility2, setDropdownVisibility2] = useState(false);
+  const [dropdownVisibility3, setDropdownVisibility3] = useState(false);
   const onSubmitHandler = (e: any) => {
     e.preventDefault();
     let temp = inputArray.split(",");
@@ -126,52 +126,93 @@ const Hyeonwook = () => {
 
   return (
     <div className="m-0 min-h-[100vh] border-[40px] border-black p-6">
-      <button onClick={(e) => setDropdownVisibility(!dropdownVisibility)}>
-        Menu
-      </button>
-      <Dropdown visibility={dropdownVisibility}>
-        <ul>
-          <li>
-            <form onSubmit={onSubmitHandler}>
-              <input
-                type="text"
-                placeholder="숫자배열을 입력하세요"
-                value={inputArray}
-                onChange={(e) => setInputArray(e.target.value)}
-                className=" w-60"
-              ></input>
-              <button className=" ml-2" type="submit">
-                Set
+      <div className=" fixed bottom-14 left-0 z-20 flex text-white">
+        <button
+          className=" h-[120px] w-10 bg-orange-500"
+          onClick={(e) => setDropdownVisibility(!dropdownVisibility)}
+        >
+          &gt;
+        </button>
+        <Dropdown visibility={dropdownVisibility}>
+          <ul className=" z-10 w-fit border-solid ">
+            <li>
+              <div className=" flex  text-center">
+                <button
+                  className=" w-full bg-orange-500 p-1 hover:bg-black"
+                  onClick={(e) => setDropdownVisibility2(!dropdownVisibility2)}
+                >
+                  Set
+                </button>
+                <Dropdown visibility={dropdownVisibility2}>
+                  <ul className=" z-10 w-fit border-solid ">
+                    <li>
+                      <form className=" flex" onSubmit={onSubmitHandler}>
+                        <input
+                          type="text"
+                          placeholder="숫자 배열을 입력하세요"
+                          value={inputArray}
+                          onChange={(e) => setInputArray(e.target.value)}
+                          className=" left-16 z-30 w-44 bg-black p-1"
+                        ></input>
+                        <button
+                          className=" ml-2 w-10 bg-orange-500 hover:bg-black"
+                          type="submit"
+                        >
+                          ok
+                        </button>
+                      </form>
+                    </li>
+                  </ul>
+                </Dropdown>
+              </div>
+            </li>
+            <li>
+              <div className=" flex  text-center">
+                <button
+                  className=" w-full bg-orange-500 p-1 hover:bg-black"
+                  onClick={(e) => setDropdownVisibility3(!dropdownVisibility3)}
+                >
+                  Add
+                </button>
+                <Dropdown visibility={dropdownVisibility3}>
+                  <ul className=" z-10 w-fit border-solid ">
+                    <li>
+                      <form className=" flex " onSubmit={addHandler}>
+                        <input
+                          type="text"
+                          placeholder="숫자나 배열을 입력하세요"
+                          value={addInputArray}
+                          onChange={(e) => setAddInputArray(e.target.value)}
+                          className=" left-16 z-30 w-44 bg-black p-1"
+                        ></input>
+                        <button
+                          className=" ml-2 w-10 bg-orange-500 hover:bg-black"
+                          type="submit"
+                        >
+                          ok
+                        </button>
+                      </form>
+                    </li>
+                  </ul>
+                </Dropdown>
+              </div>
+            </li>
+            <li>
+              <button
+                className=" cursor-pointer bg-orange-500 p-1 hover:bg-black"
+                onClick={() => setBinaryTreeArray([""])}
+              >
+                Clear
               </button>
-            </form>
-          </li>
-          <li>
-            <form onSubmit={addHandler}>
-              <input
-                type="text"
-                placeholder="숫자나 배열을 입력하세요"
-                value={addInputArray}
-                onChange={(e) => setAddInputArray(e.target.value)}
-                className=" w-60"
-              ></input>
-              <button className=" ml-2" type="submit">
-                Add
-              </button>
-            </form>
-          </li>
-          <li>
-            <a
-              className=" cursor-pointer"
-              onClick={() => setBinaryTreeArray([""])}
-            >
-              Clear
-            </a>
-          </li>
-          <li>Menu5</li>
-        </ul>
-      </Dropdown>
+            </li>
+          </ul>
+        </Dropdown>
+      </div>
       <div className="">
-        <h1 className=" text-center text-4xl">
+        <h1
+          className=" z-0 text-center text-4xl
+        "
+        >
           Level-Order Array to Binary Tree
         </h1>
         <div className=" mt-10">

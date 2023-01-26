@@ -3,13 +3,18 @@ import "./styles.css";
 
 const Dropdown = (props: any) => {
   const [visibilityAnimation, setVisibilityAnimation] = useState(false);
+  const [overflow, setOverflow] = useState(false);
 
   useEffect(() => {
     if (props.visibility) {
+      setTimeout(() => {
+        setOverflow(true);
+      }, 400);
       setVisibilityAnimation(true);
     } else {
       setTimeout(() => {
         setVisibilityAnimation(false);
+        setOverflow(false);
       }, 400);
     }
   }, [props.visibility]);
@@ -17,15 +22,17 @@ const Dropdown = (props: any) => {
   return (
     <div
       className={
-        " absolute " +
+        " absolute left-12 overflow-hidden" +
         `${
           props.visibility
-            ? "slide-fade-in-dropdown"
-            : "slide-fade-out-dropdown"
+            ? overflow
+              ? " slide-fade-in-dropdown overflow-visible"
+              : " slide-fade-in-dropdown overflow-hidden"
+            : " slide-fade-out-dropdown overflow-hidden"
         }`
       }
     >
-      {props.visibility && props.children}
+      {visibilityAnimation && props.children}
     </div>
   );
 };

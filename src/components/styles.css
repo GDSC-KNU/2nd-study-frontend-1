@@ -115,9 +115,9 @@
   }
 }
 
-.slide-fade-in-dropdown {
+/* .slide-fade-in-dropdown {
   overflow: hidden;
-}
+} */
 
 .slide-fade-in-dropdown > ul {
   animation: slide-fade-in-dropdown-animation 0.4s ease;
@@ -125,17 +125,17 @@
 
 @keyframes slide-fade-in-dropdown-animation {
   0% {
-    transform: translateY(-100%);
+    transform: translateX(-100%);
   }
 
   100% {
-    transform: translateY(0);
+    transform: translate(0);
   }
 }
-
+/* 
 .slide-fade-in-dropdown {
-  overflow: hidden;
-}
+  overflow: visible;
+} */
 
 .slide-fade-in-dropdown > ul {
   animation: slide-fade-in-dropdown-animation 0.4s ease;
@@ -145,17 +145,17 @@
 
 @keyframes slide-fade-out-dropdown-animation {
   0% {
-    transform: translateY(0);
+    transform: translateX(0);
   }
 
   100% {
-    transform: translateY(-100%);
+    transform: translateX(-100%);
   }
 }
 
-.slide-fade-out-dropdown {
-  overflow: hidden;
-}
+/* .slide-fade-out-dropdown {
+  overflow: visible;
+} */
 
 .slide-fade-out-dropdown > ul {
   animation: slide-fade-out-dropdown-animation 0.4s ease;
