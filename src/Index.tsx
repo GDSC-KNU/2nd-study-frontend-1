@@ -10,8 +10,8 @@ interface IPostProps {
 
 const posts: Array<IPostProps> = [
   {
-    title: "B+-Tree",
-    content: "B+-Tree visualized by",
+    title: "DFS/BFS",
+    content: "DFS/BFS visualized by",
     author: "Chaejun Lee",
     githubId: "chaejunlee",
     link: "chaejunlee",
