@@ -359,12 +359,6 @@ const Chaejun = () => {
     deque: [{ x: 0, y: 0 }],
   });
 
-  function onChangeHandler() {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      initializeBoard(setBoard, board.rows, safeInput(e));
-    };
-  }
-
   return (
     <MainLayout>
       <BoardContext.Provider value={{ board, setBoard }}>
@@ -373,11 +367,15 @@ const Chaejun = () => {
           <div className="grid grid-cols-2 gap-2">
             <NumberInput
               props={{ label: "columns", board, setBoard }}
-              onChange={onChangeHandler}
+              onChange={(e) =>
+                initializeBoard(setBoard, board.rows, safeInput(e))
+              }
             />
             <NumberInput
               props={{ label: "rows", board, setBoard }}
-              onChange={onChangeHandler}
+              onChange={(e) =>
+                initializeBoard(setBoard, safeInput(e), board.columns)
+              }
             />
             <ResetButton />
             <SetMazeButton />
