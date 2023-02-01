@@ -57,15 +57,15 @@ function TableCell({
 }
 
 function TableRow({
-  props: { rowId, row },
+  props: { row, rowId },
 }: {
   props: { rowId: number; row: BlockStatusType[] };
 }): ReactElement {
   return (
-    <tr key={rowId}>
+    <tr>
       {row.map((block, blockId) => (
         <TableCell
-          key={"" + block + blockId}
+          key={"" + rowId + blockId}
           props={{
             currentPoint: { y: rowId, x: blockId },
             block,
@@ -85,7 +85,7 @@ export function Table(): ReactElement {
     <table className="mx-auto border-collapse">
       <tbody>
         {board.maze.map((row, rowId) => (
-          <TableRow key={rowId} props={{ rowId, row }} />
+          <TableRow key={rowId} props={{ row, rowId }} />
         ))}
       </tbody>
     </table>
