@@ -19,7 +19,6 @@ const Chaejun = () => {
     rows: 10,
     columns: 10,
     maze: create2DArray(10, 10),
-    currentPoint: { x: 0, y: 0 },
     deque: [{ x: 0, y: 0 }],
   });
 

@@ -8,7 +8,6 @@ export interface BoardInterface {
   rows: number;
   columns: number;
   maze: BlockStatusType[][];
-  currentPoint: BlockInterface;
   deque: BlockInterface[];
 }
 export interface BoardContextInterface {

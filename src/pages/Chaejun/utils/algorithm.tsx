@@ -56,7 +56,6 @@ export function DFS(prev: BoardInterface): BoardInterface {
         return {
           ...prev,
           maze: newBoard,
-          currentPoint: nextPoint(currentPoint, option),
           deque: [...stack, nextPoint(currentPoint, option)],
         };
       }
