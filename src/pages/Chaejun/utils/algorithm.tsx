@@ -53,7 +53,7 @@ export function DFS(prev: BoardInterface): BoardInterface {
     }
     stack.pop();
   }
-  return { ...prev, maze: newBoard };
+  return { ...prev, maze: newBoard, deque: stack };
 }
 
 export function BFS(prev: BoardInterface): BoardInterface {
