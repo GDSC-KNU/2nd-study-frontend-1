@@ -1,4 +1,5 @@
 import {
+  BlockInterface,
   BoardInterface,
   deepCopy2DArray,
   didReach,
@@ -13,8 +14,22 @@ const directions = [
   { dir: "LEFT", x: -1, y: 0 },
 ] as const;
 
+function nextPoint(
+  currentPoint: BlockInterface,
+  option:
+    | { readonly dir: "DOWN"; readonly x: 0; readonly y: 1 }
+    | { readonly dir: "RIGHT"; readonly x: 1; readonly y: 0 }
+    | { readonly dir: "UP"; readonly x: 0; readonly y: -1 }
+    | { readonly dir: "LEFT"; readonly x: -1; readonly y: 0 }
+): BlockInterface {
+  return {
+    x: currentPoint.x + option.x,
+    y: currentPoint.y + option.y,
+  };
+}
+
 export function DFS(prev: BoardInterface) {
-  const stack = [...prev.deque];
+  const stack: BlockInterface[] = [...prev.deque];
   const newBoard = deepCopy2DArray(prev);
   const lastPoint = stack[stack.length - 1];
   const end = { y: newBoard.length - 1, x: newBoard[0].length - 1 };
@@ -25,21 +40,22 @@ export function DFS(prev: BoardInterface) {
     if (didReach(currentPoint, end)) return prev;
 
     for (const option of directions) {
-      const nextPoint = {
-        x: currentPoint.x + option.x,
-        y: currentPoint.y + option.y,
-      };
-      if (outOfBoard(nextPoint, end)) continue;
-      const { visited, blocked } = evaluateBlock(newBoard, nextPoint);
+      if (outOfBoard(nextPoint(currentPoint, option), end)) continue;
+      const { visited, blocked } = evaluateBlock(
+        newBoard,
+        nextPoint(currentPoint, option)
+      );
       if (!visited && !blocked) {
         newBoard[currentPoint.y][currentPoint.x] = "VISITED";
         newBoard[lastPoint.y][lastPoint.x] = "VISITED";
-        newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
+        newBoard[nextPoint(currentPoint, option).y][
+          nextPoint(currentPoint, option).x
+        ] = "ACTIVE";
         return {
           ...prev,
           maze: newBoard,
-          currentPoint: nextPoint,
-          deque: [...stack, nextPoint],
+          currentPoint: nextPoint(currentPoint, option),
+          deque: [...stack, nextPoint(currentPoint, option)],
         };
       }
     }
@@ -51,7 +67,7 @@ export function DFS(prev: BoardInterface) {
 export function BFS(prev: BoardInterface) {
   const queue = [...prev.deque];
   const newBoard = deepCopy2DArray(prev);
-  const currentQueue = [];
+  const currentQueue: BlockInterface[] = [];
   const end = { x: newBoard.length - 1, y: newBoard[0].length - 1 };
 
   while (queue.length) {
@@ -60,15 +76,16 @@ export function BFS(prev: BoardInterface) {
 
     newBoard[currentPoint.y][currentPoint.x] = "VISITED";
     for (const option of directions) {
-      const nextPoint = {
-        x: currentPoint.x + option.x,
-        y: currentPoint.y + option.y,
-      };
-      if (outOfBoard(nextPoint, end)) continue;
-      const { visited, blocked } = evaluateBlock(newBoard, nextPoint);
+      if (outOfBoard(nextPoint(currentPoint, option), end)) continue;
+      const { visited, blocked } = evaluateBlock(
+        newBoard,
+        nextPoint(currentPoint, option)
+      );
       if (!visited && !blocked) {
-        newBoard[nextPoint.y][nextPoint.x] = "ACTIVE";
-        currentQueue.push(nextPoint);
+        newBoard[nextPoint(currentPoint, option).y][
+          nextPoint(currentPoint, option).x
+        ] = "ACTIVE";
+        currentQueue.push(nextPoint(currentPoint, option));
       }
     }
   }
