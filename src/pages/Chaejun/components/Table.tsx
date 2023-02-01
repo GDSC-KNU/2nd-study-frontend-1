@@ -1,6 +1,11 @@
 import { ReactElement, useContext } from "react";
 import { BoardContext } from "../BoardContext";
-import { didReach, deepCopy2DArray, BlockStatusType } from "../utils/board";
+import {
+  didReach,
+  deepCopy2DArray,
+  BlockStatusType,
+  BlockInterface,
+} from "../utils/board";
 import { BoardContextInterface } from "../utils/board";
 
 const blockStyle = {
@@ -17,8 +22,64 @@ const toggleState = {
   ACTIVE: "VISITED",
 } as const;
 
-export function Table(): ReactElement {
+function TableCell({
+  props: { currentPoint, block },
+}: {
+  props: {
+    currentPoint: BlockInterface;
+    block: BlockStatusType;
+  };
+}): ReactElement {
   const { board, setBoard } = {
+    ...useContext(BoardContext),
+  } as BoardContextInterface;
+
+  const start = { y: 0, x: 0 };
+  const end = { y: board.rows - 1, x: board.columns - 1 };
+  const isStartOrEnd =
+    didReach(currentPoint, start) || didReach(currentPoint, end);
+  const blockClassName = `border-2 border-black ${blockStyle[block]} ${
+    isStartOrEnd ? "bg-blue-400" : ""
+  }`;
+
+  const onClickHandler = () => {
+    setBoard((prev) => {
+      if (isStartOrEnd) return prev;
+      const newBoard = deepCopy2DArray(prev);
+      newBoard[currentPoint.y][currentPoint.x] = toggleState[block];
+      return { ...prev, maze: newBoard };
+    });
+  };
+
+  return (
+    <td className={blockClassName} onClick={onClickHandler}>
+      <div className="aspect-square w-8"></div>
+    </td>
+  );
+}
+
+function TableRow({
+  props: { rowId, row },
+}: {
+  props: { rowId: number; row: BlockStatusType[] };
+}): ReactElement {
+  return (
+    <tr key={rowId}>
+      {row.map((block, blockId) => (
+        <TableCell
+          key={"" + block + blockId}
+          props={{
+            currentPoint: { y: rowId, x: blockId },
+            block,
+          }}
+        />
+      ))}
+    </tr>
+  );
+}
+
+export function Table(): ReactElement {
+  const { board } = {
     ...useContext(BoardContext),
   } as BoardContextInterface;
 
@@ -26,65 +87,9 @@ export function Table(): ReactElement {
     <table className="mx-auto border-collapse">
       <tbody>
         {board.maze.map((row, rowId) => (
-          <TableRow props={{ rowId, row }} />
+          <TableRow key={rowId} props={{ rowId, row }} />
         ))}
       </tbody>
     </table>
   );
-
-  function TableRow({
-    props: { rowId, row },
-  }: {
-    props: { rowId: number; row: BlockStatusType[] };
-  }): ReactElement {
-    return (
-      <tr key={rowId}>
-        {row.map((block, blockId) => {
-          const start = { y: 0, x: 0 };
-          const end = { y: board.rows - 1, x: board.columns - 1 };
-          const currentPoint = { y: rowId, x: blockId };
-          const isStartOrEnd =
-            didReach(currentPoint, start) || didReach(currentPoint, end);
-          const blockClassName = `border-2 border-black ${blockStyle[block]} ${
-            isStartOrEnd ? "bg-blue-400" : ""
-          }`;
-          return (
-            <TableCell
-              props={{ blockClassName, rowId, blockId, isStartOrEnd, block }}
-            />
-          );
-        })}
-      </tr>
-    );
-  }
-
-  function TableCell({
-    props: { blockClassName, rowId, blockId, isStartOrEnd, block },
-  }: {
-    props: {
-      blockClassName: string;
-      rowId: number;
-      blockId: number;
-      isStartOrEnd: boolean;
-      block: BlockStatusType;
-    };
-  }): ReactElement {
-    const onClickHandler = () => {
-      setBoard((prev) => {
-        if (isStartOrEnd) return prev;
-        const newBoard = deepCopy2DArray(prev);
-        newBoard[rowId][blockId] = toggleState[block];
-        return { ...prev, maze: newBoard };
-      });
-    };
-    return (
-      <td
-        className={blockClassName}
-        key={"" + rowId + blockId}
-        onClick={onClickHandler}
-      >
-        <div className="aspect-square w-8"></div>
-      </td>
-    );
-  }
 }
