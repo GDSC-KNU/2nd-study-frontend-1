@@ -16,8 +16,8 @@ export interface BoardContextInterface {
   setBoard: React.Dispatch<React.SetStateAction<BoardInterface>>;
 }
 
-export function deepCopy2DArray(prev: BoardInterface) {
-  return prev.maze.map((row) => row.slice());
+export function deepCopy2DArray(maze: BlockStatusType[][]) {
+  return maze.map((row) => row.slice());
 }
 export function safeInput(e: React.ChangeEvent<HTMLInputElement>): number {
   return Math.max(Number.parseInt(e.target.value), 1);

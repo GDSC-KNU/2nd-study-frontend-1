@@ -22,7 +22,7 @@ export function SetMazeButton() {
   );
 
   function getRandomMaze(prev: BoardInterface) {
-    const newBoard = deepCopy2DArray(prev);
+    const newBoard = deepCopy2DArray(prev.maze);
     const rows = newBoard.length;
     const columns = newBoard[0].length;
     const start = { y: 0, x: 0 };
