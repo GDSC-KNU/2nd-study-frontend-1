@@ -17,11 +17,7 @@ const directions = [
 
 function nextPoint(
   currentPoint: BlockInterface,
-  option:
-    | { readonly dir: "DOWN"; readonly x: 0; readonly y: 1 }
-    | { readonly dir: "RIGHT"; readonly x: 1; readonly y: 0 }
-    | { readonly dir: "UP"; readonly x: 0; readonly y: -1 }
-    | { readonly dir: "LEFT"; readonly x: -1; readonly y: 0 }
+  option: typeof directions[number]
 ): BlockInterface {
   return {
     x: currentPoint.x + option.x,
@@ -40,7 +36,10 @@ function isValidBlock(
 export function DFS(prev: BoardInterface): BoardInterface {
   const stack: BlockInterface[] = [...prev.deque];
   const newBoard = deepCopy2DArray(prev.maze);
-  const end = { y: newBoard.length - 1, x: newBoard[0].length - 1 };
+  const end: BlockInterface = {
+    y: newBoard.length - 1,
+    x: newBoard[0].length - 1,
+  };
 
   while (stack.length) {
     const currentPoint = stack.at(-1)!;
@@ -69,7 +68,10 @@ export function BFS(prev: BoardInterface): BoardInterface {
   const queue = [...prev.deque];
   const newBoard = deepCopy2DArray(prev.maze);
   const currentQueue: BlockInterface[] = [];
-  const end = { x: newBoard.length - 1, y: newBoard[0].length - 1 };
+  const end: BlockInterface = {
+    x: newBoard.length - 1,
+    y: newBoard[0].length - 1,
+  };
 
   while (queue.length) {
     const currentPoint = queue.shift()!;
