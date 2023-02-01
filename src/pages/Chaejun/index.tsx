@@ -30,15 +30,15 @@ const Chaejun = () => {
         <form className="flex flex-col gap-2 py-4">
           <div className="grid grid-cols-2 gap-2">
             <NumberInput
-              props={{ label: "columns", board, setBoard }}
+              props={{ label: "rows", board, setBoard }}
               onChange={(e) =>
-                initializeBoard(setBoard, board.rows, safeInput(e))
+                initializeBoard({ setBoard, rows: safeInput(e) })
               }
             />
             <NumberInput
-              props={{ label: "rows", board, setBoard }}
+              props={{ label: "columns", board, setBoard }}
               onChange={(e) =>
-                initializeBoard(setBoard, safeInput(e), board.columns)
+                initializeBoard({ setBoard, columns: safeInput(e) })
               }
             />
             <ResetButton />

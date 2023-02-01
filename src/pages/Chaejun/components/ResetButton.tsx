@@ -11,7 +11,7 @@ export function ResetButton() {
     <button
       type="button"
       className="grow rounded-md border-2 border-black"
-      onClick={() => initializeBoard(setBoard, board.rows, board.columns)}
+      onClick={() => initializeBoard({ setBoard })}
     >
       Reset
     </button>

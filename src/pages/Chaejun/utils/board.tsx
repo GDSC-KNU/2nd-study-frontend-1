@@ -29,14 +29,26 @@ export function create2DArray(rows: number, columns: number) {
   newBoard[0][0] = "VISITED";
   return newBoard;
 }
-export function initializeBoard(
-  setBoard: React.Dispatch<React.SetStateAction<BoardInterface>>,
-  rows: number,
-  columns: number
-) {
+export function initializeBoard({
+  setBoard,
+  rows,
+  columns,
+}: {
+  setBoard: React.Dispatch<React.SetStateAction<BoardInterface>>;
+  rows?: number;
+  columns?: number;
+}) {
   setBoard((prev) => {
-    const newBoard = create2DArray(rows, columns);
-    return { ...prev, rows, columns, maze: newBoard, deque: [{ x: 0, y: 0 }] };
+    const newRows = rows ?? prev.rows;
+    const newColumns = columns ?? prev.columns;
+    const newBoard = create2DArray(newRows, newColumns);
+    return {
+      ...prev,
+      rows: newRows,
+      columns: newColumns,
+      maze: newBoard,
+      deque: [{ x: 0, y: 0 }],
+    };
   });
 }
 export function randomlyBlockOrEmpty() {
