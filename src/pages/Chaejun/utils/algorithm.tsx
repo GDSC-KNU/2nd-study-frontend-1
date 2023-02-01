@@ -1,10 +1,9 @@
 import {
   BlockInterface,
   BoardInterface,
-  BlockStatusType,
   deepCopy2DArray,
   didReach,
-  evaluateBlock,
+  isValidBlock,
   outOfBoard,
 } from "./board";
 
@@ -25,14 +24,6 @@ function nextPoint(
   };
 }
 
-function isValidBlock(
-  newBoard: BlockStatusType[][],
-  nextPoint: BlockInterface
-) {
-  const { visited, blocked } = evaluateBlock(newBoard, nextPoint);
-  return !visited && !blocked;
-}
-
 export function DFS(prev: BoardInterface): BoardInterface {
   const stack: BlockInterface[] = [...prev.deque];
   const newBoard = deepCopy2DArray(prev.maze);
@@ -47,17 +38,18 @@ export function DFS(prev: BoardInterface): BoardInterface {
     if (didReach(currentPoint, end)) return { ...prev, maze: newBoard };
 
     for (const option of directions) {
-      if (outOfBoard(nextPoint(currentPoint, option), end)) continue;
-      if (isValidBlock(newBoard, nextPoint(currentPoint, option))) {
-        newBoard[nextPoint(currentPoint, option).y][
-          nextPoint(currentPoint, option).x
-        ] = "ACTIVE";
-        return {
-          ...prev,
-          maze: newBoard,
-          deque: [...stack, nextPoint(currentPoint, option)],
-        };
-      }
+      if (!isValidBlock(nextPoint(currentPoint, option), end, newBoard))
+        continue;
+
+      newBoard[nextPoint(currentPoint, option).y][
+        nextPoint(currentPoint, option).x
+      ] = "ACTIVE";
+
+      return {
+        ...prev,
+        maze: newBoard,
+        deque: [...stack, nextPoint(currentPoint, option)],
+      };
     }
     stack.pop();
   }
@@ -66,8 +58,8 @@ export function DFS(prev: BoardInterface): BoardInterface {
 
 export function BFS(prev: BoardInterface): BoardInterface {
   const queue = [...prev.deque];
-  const newBoard = deepCopy2DArray(prev.maze);
   const currentQueue: BlockInterface[] = [];
+  const newBoard = deepCopy2DArray(prev.maze);
   const end: BlockInterface = {
     x: newBoard.length - 1,
     y: newBoard[0].length - 1,
@@ -79,13 +71,14 @@ export function BFS(prev: BoardInterface): BoardInterface {
     if (didReach(currentPoint, end)) return { ...prev, maze: newBoard };
 
     for (const option of directions) {
-      if (outOfBoard(nextPoint(currentPoint, option), end)) continue;
-      if (isValidBlock(newBoard, nextPoint(currentPoint, option))) {
-        newBoard[nextPoint(currentPoint, option).y][
-          nextPoint(currentPoint, option).x
-        ] = "ACTIVE";
-        currentQueue.push(nextPoint(currentPoint, option));
-      }
+      console.log();
+      if (!isValidBlock(nextPoint(currentPoint, option), end, newBoard))
+        continue;
+
+      newBoard[nextPoint(currentPoint, option).y][
+        nextPoint(currentPoint, option).x
+      ] = "ACTIVE";
+      currentQueue.push(nextPoint(currentPoint, option));
     }
   }
   return { ...prev, maze: newBoard, deque: [...currentQueue] };

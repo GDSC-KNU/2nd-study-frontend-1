@@ -76,13 +76,20 @@ export function outOfBoard(nextPoint: BlockInterface, end: BlockInterface) {
     nextPoint.y > end.y
   );
 }
-export function evaluateBlock(
-  newBoard: BlockStatusType[][],
-  nextPoint: BlockInterface
+export function isVisited(block: BlockStatusType) {
+  return block === "VISITED" || block === "ACTIVE";
+}
+export function isBlocked(block: BlockStatusType) {
+  return block === "BLOCKED";
+}
+export function isValidBlock(
+  nextPoint: BlockInterface,
+  end: BlockInterface,
+  board: BlockStatusType[][]
 ) {
-  const visited =
-    newBoard[nextPoint.y][nextPoint.x] === "VISITED" ||
-    newBoard[nextPoint.y][nextPoint.x] === "ACTIVE";
-  const blocked = newBoard[nextPoint.y][nextPoint.x] === "BLOCKED";
-  return { visited, blocked };
+  return (
+    !outOfBoard(nextPoint, end) &&
+    !isVisited(board[nextPoint.y][nextPoint.x]) &&
+    !isBlocked(board[nextPoint.y][nextPoint.x])
+  );
 }
