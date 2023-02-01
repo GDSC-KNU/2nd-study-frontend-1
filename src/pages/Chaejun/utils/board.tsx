@@ -62,6 +62,13 @@ export function didReach(
 ) {
   return currentPoint.x === destination.x && currentPoint.y === destination.y;
 }
+export function isStartOrEnd(
+  currentPoint: BlockInterface,
+  start: { y: number; x: number },
+  end: { y: number; x: number }
+) {
+  return didReach(currentPoint, start) || didReach(currentPoint, end);
+}
 export function outOfBoard(nextPoint: BlockInterface, end: BlockInterface) {
   return (
     nextPoint.x < 0 ||
@@ -70,7 +77,6 @@ export function outOfBoard(nextPoint: BlockInterface, end: BlockInterface) {
     nextPoint.y > end.y
   );
 }
-
 export function evaluateBlock(
   newBoard: BlockStatusType[][],
   nextPoint: BlockInterface

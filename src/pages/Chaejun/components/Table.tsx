@@ -1,10 +1,10 @@
 import { ReactElement, useContext } from "react";
 import { BoardContext } from "../BoardContext";
 import {
-  didReach,
   deepCopy2DArray,
   BlockStatusType,
   BlockInterface,
+  isStartOrEnd,
 } from "../utils/board";
 import { BoardContextInterface } from "../utils/board";
 
@@ -36,15 +36,13 @@ function TableCell({
 
   const start = { y: 0, x: 0 };
   const end = { y: board.rows - 1, x: board.columns - 1 };
-  const isStartOrEnd =
-    didReach(currentPoint, start) || didReach(currentPoint, end);
   const blockClassName = `border-2 border-black ${blockStyle[block]} ${
-    isStartOrEnd ? "bg-blue-400" : ""
+    isStartOrEnd(currentPoint, start, end) ? "bg-blue-400" : ""
   }`;
 
   const onClickHandler = () => {
     setBoard((prev) => {
-      if (isStartOrEnd) return prev;
+      if (isStartOrEnd(currentPoint, start, end)) return prev;
       const newBoard = deepCopy2DArray(prev);
       newBoard[currentPoint.y][currentPoint.x] = toggleState[block];
       return { ...prev, maze: newBoard };

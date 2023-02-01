@@ -4,6 +4,7 @@ import {
   didReach,
   deepCopy2DArray,
   randomlyBlockOrEmpty,
+  isStartOrEnd,
 } from "../utils/board";
 import { BoardContextInterface, BoardInterface } from "../utils/board";
 
@@ -25,14 +26,12 @@ export function SetMazeButton() {
     const newBoard = deepCopy2DArray(prev);
     const rows = newBoard.length;
     const columns = newBoard[0].length;
+    const start = { y: 0, x: 0 };
+    const end = { y: rows - 1, x: columns - 1 };
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
         const currentPoint = { y: i, x: j };
-        const start = { y: 0, x: 0 };
-        const end = { y: rows - 1, x: columns - 1 };
-        const isStartOrEnd =
-          didReach(currentPoint, start) || didReach(currentPoint, end);
-        if (isStartOrEnd) continue;
+        if (isStartOrEnd(currentPoint, start, end)) continue;
         else newBoard[i][j] = randomlyBlockOrEmpty();
       }
     }
