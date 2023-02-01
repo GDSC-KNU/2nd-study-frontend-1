@@ -29,18 +29,8 @@ const Chaejun = () => {
         <h1 className="text-4xl font-bold">DFS/BFS</h1>
         <form className="flex flex-col gap-2 py-4">
           <div className="grid grid-cols-2 gap-2">
-            <NumberInput
-              props={{ label: "rows", board, setBoard }}
-              onChange={(e) =>
-                initializeBoard({ setBoard, rows: safeInput(e) })
-              }
-            />
-            <NumberInput
-              props={{ label: "columns", board, setBoard }}
-              onChange={(e) =>
-                initializeBoard({ setBoard, columns: safeInput(e) })
-              }
-            />
+            <NumberInput props={{ label: "rows" }} />
+            <NumberInput props={{ label: "columns" }} />
             <ResetButton />
             <SetMazeButton />
             <AlgoButton callbackFn={DFS} label={"DFS"} />

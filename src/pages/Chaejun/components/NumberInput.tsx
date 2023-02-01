@@ -1,25 +1,30 @@
-import { ReactElement } from "react";
-import { BoardInterface } from "../utils/board";
+import { ReactElement, useContext } from "react";
+import { BoardContext } from "../BoardContext";
+import {
+  BoardContextInterface,
+  BoardInterface,
+  initializeBoard,
+  safeInput,
+} from "../utils/board";
 
 export function NumberInput({
-  props,
-  onChange,
+  props: { label },
 }: {
   props: {
     label: "columns" | "rows";
-    board: BoardInterface;
-    setBoard: React.Dispatch<React.SetStateAction<BoardInterface>>;
   };
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }): ReactElement {
+  const { board, setBoard } = {
+    ...useContext(BoardContext),
+  } as BoardContextInterface;
   return (
     <div className="grow">
-      <label className="block">{props.label}</label>
+      <label className="block">{label}</label>
       <input
         className="w-full rounded-md border-2 border-black py-2 px-3"
         type="number"
-        onChange={onChange}
-        value={props.board[props.label]}
+        onChange={(e) => initializeBoard({ setBoard, [label]: safeInput(e) })}
+        value={board[label]}
         min="0"
       />
     </div>
