@@ -37,18 +37,18 @@ export function DFS(prev: BoardInterface): BoardInterface {
     newBoard[currentPoint.y][currentPoint.x] = "VISITED";
     if (didReach(currentPoint, end)) return { ...prev, maze: newBoard };
 
-    for (const option of directions) {
-      if (!isValidBlock(nextPoint(currentPoint, option), end, newBoard))
+    for (const direction of directions) {
+      if (!isValidBlock(nextPoint(currentPoint, direction), end, newBoard))
         continue;
 
-      newBoard[nextPoint(currentPoint, option).y][
-        nextPoint(currentPoint, option).x
+      newBoard[nextPoint(currentPoint, direction).y][
+        nextPoint(currentPoint, direction).x
       ] = "ACTIVE";
 
       return {
         ...prev,
         maze: newBoard,
-        deque: [...stack, nextPoint(currentPoint, option)],
+        deque: [...stack, nextPoint(currentPoint, direction)],
       };
     }
     stack.pop();
@@ -70,15 +70,15 @@ export function BFS(prev: BoardInterface): BoardInterface {
     newBoard[currentPoint.y][currentPoint.x] = "VISITED";
     if (didReach(currentPoint, end)) return { ...prev, maze: newBoard };
 
-    for (const option of directions) {
-      console.log();
-      if (!isValidBlock(nextPoint(currentPoint, option), end, newBoard))
+    for (const direction of directions) {
+      if (!isValidBlock(nextPoint(currentPoint, direction), end, newBoard))
         continue;
 
-      newBoard[nextPoint(currentPoint, option).y][
-        nextPoint(currentPoint, option).x
+      newBoard[nextPoint(currentPoint, direction).y][
+        nextPoint(currentPoint, direction).x
       ] = "ACTIVE";
-      currentQueue.push(nextPoint(currentPoint, option));
+
+      currentQueue.push(nextPoint(currentPoint, direction));
     }
   }
   return { ...prev, maze: newBoard, deque: [...currentQueue] };
