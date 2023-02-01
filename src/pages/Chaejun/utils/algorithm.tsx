@@ -1,6 +1,7 @@
 import {
   BlockInterface,
   BoardInterface,
+  BlockStatusType,
   deepCopy2DArray,
   didReach,
   evaluateBlock,
@@ -28,6 +29,14 @@ function nextPoint(
   };
 }
 
+function isValidBlock(
+  newBoard: BlockStatusType[][],
+  nextPoint: BlockInterface
+) {
+  const { visited, blocked } = evaluateBlock(newBoard, nextPoint);
+  return !visited && !blocked;
+}
+
 export function DFS(prev: BoardInterface) {
   const stack: BlockInterface[] = [...prev.deque];
   const newBoard = deepCopy2DArray(prev);
@@ -41,11 +50,7 @@ export function DFS(prev: BoardInterface) {
 
     for (const option of directions) {
       if (outOfBoard(nextPoint(currentPoint, option), end)) continue;
-      const { visited, blocked } = evaluateBlock(
-        newBoard,
-        nextPoint(currentPoint, option)
-      );
-      if (!visited && !blocked) {
+      if (isValidBlock(newBoard, nextPoint(currentPoint, option))) {
         newBoard[currentPoint.y][currentPoint.x] = "VISITED";
         newBoard[lastPoint.y][lastPoint.x] = "VISITED";
         newBoard[nextPoint(currentPoint, option).y][
@@ -77,11 +82,7 @@ export function BFS(prev: BoardInterface) {
     newBoard[currentPoint.y][currentPoint.x] = "VISITED";
     for (const option of directions) {
       if (outOfBoard(nextPoint(currentPoint, option), end)) continue;
-      const { visited, blocked } = evaluateBlock(
-        newBoard,
-        nextPoint(currentPoint, option)
-      );
-      if (!visited && !blocked) {
+      if (isValidBlock(newBoard, nextPoint(currentPoint, option))) {
         newBoard[nextPoint(currentPoint, option).y][
           nextPoint(currentPoint, option).x
         ] = "ACTIVE";
