@@ -116,7 +116,7 @@ export const directions = [
   { dir: "UP", x: 0, y: -1 },
   { dir: "LEFT", x: -1, y: 0 },
 ] as const;
-export type directions = typeof directions[number];
+export type directionsType = typeof directions[number];
 export function getY(currentPoint: BlockInterface): number {
   return currentPoint.y;
 }

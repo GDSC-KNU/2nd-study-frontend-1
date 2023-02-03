@@ -5,6 +5,7 @@ import {
   deepCopy2DArray,
   didReach,
   directions,
+  directionsType,
   getEnd,
   getX,
   getY,
@@ -93,7 +94,7 @@ function getNextBlocksToVisit(
   previousContext: BoardInterface
 ) {
   return possibleDirections(currentPoint, previousContext).reduce(
-    (accQueue: BlockInterface[], direction: directions) => {
+    (accQueue: BlockInterface[], direction: directionsType) => {
       setCurrentPointActive(previousContext, currentPoint, direction);
       accQueue.push(nextPoint(currentPoint, direction));
       return accQueue;
@@ -105,7 +106,7 @@ function getNextBlocksToVisit(
 function setCurrentPointActive(
   context: BoardInterface,
   currentPoint: BlockInterface,
-  direction: directions
+  direction: directionsType
 ) {
   context.maze[getY(nextPoint(currentPoint, direction))][
     getX(nextPoint(currentPoint, direction))
