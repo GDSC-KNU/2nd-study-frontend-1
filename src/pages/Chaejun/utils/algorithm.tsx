@@ -14,6 +14,12 @@ const directions = [
   { dir: "LEFT", x: -1, y: 0 },
 ] as const;
 
+function getY(currentPoint: BlockInterface): number {
+  return currentPoint.y;
+}
+function getX(currentPoint: BlockInterface): number {
+  return currentPoint.x;
+}
 function nextPoint(
   currentPoint: BlockInterface,
   option: typeof directions[number]
@@ -30,7 +36,7 @@ export function DFS(prev: BoardInterface): BoardInterface {
 
   while (stack.length) {
     const currentPoint = stack.at(-1)!;
-    newBoard[currentPoint.y][currentPoint.x] = "VISITED";
+    newBoard[getY(currentPoint)][getX(currentPoint)] = "VISITED";
     if (didReach(currentPoint, getEnd(newBoard))) return { ...prev };
 
     for (const direction of directions) {
@@ -43,8 +49,8 @@ export function DFS(prev: BoardInterface): BoardInterface {
       )
         continue;
 
-      newBoard[nextPoint(currentPoint, direction).y][
-        nextPoint(currentPoint, direction).x
+      newBoard[getY(nextPoint(currentPoint, direction))][
+        getX(nextPoint(currentPoint, direction))
       ] = "ACTIVE";
 
       return {
@@ -65,7 +71,7 @@ export function BFS(prev: BoardInterface): BoardInterface {
 
   while (queue.length) {
     const currentPoint = queue.shift()!;
-    newBoard[currentPoint.y][currentPoint.x] = "VISITED";
+    newBoard[getY(currentPoint)][getX(currentPoint)] = "VISITED";
     if (didReach(currentPoint, getEnd(newBoard)))
       return { ...prev, maze: newBoard };
 
@@ -79,8 +85,8 @@ export function BFS(prev: BoardInterface): BoardInterface {
       )
         continue;
 
-      newBoard[nextPoint(currentPoint, direction).y][
-        nextPoint(currentPoint, direction).x
+      newBoard[getY(nextPoint(currentPoint, direction))][
+        getX(nextPoint(currentPoint, direction))
       ] = "ACTIVE";
 
       currentQueue.push(nextPoint(currentPoint, direction));
