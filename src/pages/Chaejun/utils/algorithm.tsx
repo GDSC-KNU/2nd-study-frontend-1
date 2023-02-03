@@ -37,7 +37,8 @@ export function DFS(prev: BoardInterface): BoardInterface {
   while (stack.length) {
     const currentPoint = stack.at(-1)!;
     newBoard[getY(currentPoint)][getX(currentPoint)] = "VISITED";
-    if (didReach(currentPoint, getEnd(newBoard))) return { ...prev };
+    if (didReach(currentPoint, getEnd(newBoard)))
+      return { ...prev, maze: newBoard };
 
     for (const direction of directions) {
       if (
