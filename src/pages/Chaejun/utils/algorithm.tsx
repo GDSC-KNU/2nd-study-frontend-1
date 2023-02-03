@@ -19,19 +19,28 @@ function currentPointInDFS(stack: BlockInterface[]) {
 }
 
 export function DFS(prev: BoardInterface): BoardInterface {
-  const newBoard = {
+  const newBoard: BoardInterface = {
     rows: prev.rows,
     columns: prev.columns,
     maze: deepCopy2DArray(prev.maze),
     deque: [...prev.deque],
   };
 
+  return { ...newBoard, deque: getNextPathHistory(newBoard, prev) };
+}
+
+function getNextPathHistory(
+  newBoard: BoardInterface,
+  previousContext: BoardInterface
+): BlockInterface[] {
   while (getStack(newBoard).length) {
     setCurrentPointVisited(newBoard, currentPointInDFS(getStack(newBoard)));
     if (didReach(currentPointInDFS(getStack(newBoard)), getEnd(newBoard)))
-      return { ...newBoard };
+      return getStack(newBoard);
 
-    if (!getNextDirection(currentPointInDFS(getStack(newBoard)), prev)) {
+    if (
+      !getNextDirection(currentPointInDFS(getStack(newBoard)), previousContext)
+    ) {
       getStack(newBoard).pop();
       continue;
     }
@@ -39,21 +48,21 @@ export function DFS(prev: BoardInterface): BoardInterface {
     setCurrentPointActive(
       newBoard,
       currentPointInDFS(getStack(newBoard)),
-      getNextDirection(currentPointInDFS(getStack(newBoard)), prev)!
+      getNextDirection(currentPointInDFS(getStack(newBoard)), previousContext)!
     );
 
-    return {
-      ...newBoard,
-      deque: [
-        ...getStack(newBoard),
-        nextPoint(
+    return [
+      ...getStack(newBoard),
+      nextPoint(
+        currentPointInDFS(getStack(newBoard)),
+        getNextDirection(
           currentPointInDFS(getStack(newBoard)),
-          getNextDirection(currentPointInDFS(getStack(newBoard)), prev)!
-        ),
-      ],
-    };
+          previousContext
+        )!
+      ),
+    ];
   }
-  return { ...prev, maze: newBoard.maze, deque: getStack(newBoard) };
+  return [];
 }
 
 function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
