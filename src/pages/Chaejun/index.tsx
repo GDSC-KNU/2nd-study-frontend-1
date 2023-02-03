@@ -6,12 +6,7 @@ import { NumberInput } from "./components/NumberInput";
 import { ResetButton } from "./components/ResetButton";
 import { SetMazeButton } from "./components/SetMazeButton";
 import { Table } from "./components/Table";
-import {
-  initializeBoard,
-  create2DArray,
-  safeInput,
-  BoardInterface,
-} from "./utils/board";
+import { create2DArray, BoardInterface } from "./utils/board";
 import { BFS, DFS } from "./utils/algorithm";
 
 const Chaejun = () => {

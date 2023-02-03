@@ -2,7 +2,6 @@ import { ReactElement, useContext } from "react";
 import { BoardContext } from "../BoardContext";
 import {
   BoardContextInterface,
-  BoardInterface,
   initializeBoard,
   safeInput,
 } from "../utils/board";

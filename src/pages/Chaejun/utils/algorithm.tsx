@@ -4,7 +4,6 @@ import {
   deepCopy2DArray,
   didReach,
   isValidBlock,
-  outOfBoard,
 } from "./board";
 
 const directions = [
