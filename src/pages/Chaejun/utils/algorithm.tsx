@@ -52,20 +52,16 @@ export function DFS(prev: BoardInterface): BoardInterface {
 export function BFS(prev: BoardInterface): BoardInterface {
   return [...prev.deque].reduce(
     (accBoard: BoardInterface, currentPoint: BlockInterface) => {
-      accBoard.maze[getY(currentPoint)][getX(currentPoint)] = "VISITED";
-
+      setCurrentPointVisited(accBoard, currentPoint);
       if (didReach(currentPoint, getEnd(accBoard)))
         return { ...accBoard, deque: [] };
-
       return {
         ...accBoard,
         deque: [
           ...accBoard.deque,
           ...possibleDirections(currentPoint, accBoard).reduce(
             (accQueue: BlockInterface[], direction: directions) => {
-              accBoard.maze[getY(nextPoint(currentPoint, direction))][
-                getX(nextPoint(currentPoint, direction))
-              ] = "ACTIVE";
+              setCurrentPointActive(accBoard, currentPoint, direction);
               accQueue.push(nextPoint(currentPoint, direction));
               return accQueue;
             },
@@ -81,6 +77,23 @@ export function BFS(prev: BoardInterface): BoardInterface {
       deque: [],
     }
   );
+}
+
+function setCurrentPointActive(
+  accBoard: BoardInterface,
+  currentPoint: BlockInterface,
+  direction: directions
+) {
+  accBoard.maze[getY(nextPoint(currentPoint, direction))][
+    getX(nextPoint(currentPoint, direction))
+  ] = "ACTIVE";
+}
+
+function setCurrentPointVisited(
+  accBoard: BoardInterface,
+  currentPoint: BlockInterface
+) {
+  accBoard.maze[getY(currentPoint)][getX(currentPoint)] = "VISITED";
 }
 
 function possibleDirections(
