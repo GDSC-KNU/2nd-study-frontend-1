@@ -32,11 +32,7 @@ export function DFS(prev: BoardInterface): BoardInterface {
     if (didReach(currentPointInDFS(getStack(newBoard)), getEnd(newBoard)))
       return { ...newBoard, maze: newBoard.maze };
 
-    const direction = directions.find((direction) =>
-      isValidBlock(currentPointInDFS(getStack(newBoard)), direction, newBoard)
-    );
-
-    if (direction === undefined) {
+    if (!getNextDirection(currentPointInDFS(getStack(newBoard)), prev)) {
       getStack(newBoard).pop();
       continue;
     }
@@ -44,18 +40,29 @@ export function DFS(prev: BoardInterface): BoardInterface {
     setCurrentPointActive(
       newBoard,
       currentPointInDFS(getStack(newBoard)),
-      direction
+      getNextDirection(currentPointInDFS(getStack(newBoard)), prev)!
     );
 
     return {
       ...newBoard,
       deque: [
         ...getStack(newBoard),
-        nextPoint(currentPointInDFS(getStack(newBoard)), direction),
+        nextPoint(
+          currentPointInDFS(getStack(newBoard)),
+          getNextDirection(currentPointInDFS(getStack(newBoard)), prev)!
+        ),
       ],
     };
   }
   return { ...prev, maze: newBoard.maze, deque: getStack(newBoard) };
+}
+
+function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
+  return (
+    directions.find((direction) =>
+      isValidBlock(currentPoint, direction, prev)
+    ) ?? null
+  );
 }
 
 function getStack(newBoard: {
