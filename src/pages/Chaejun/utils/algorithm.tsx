@@ -29,35 +29,40 @@ function nextPoint(
     y: currentPoint.y + option.y,
   };
 }
+function currentPointInDFS(stack: BlockInterface[]) {
+  // top while loop checks the length of stack
+  // so it is safe to use stack.at(-1)
+  return stack.at(-1)!;
+}
 
 export function DFS(prev: BoardInterface): BoardInterface {
   const stack: BlockInterface[] = [...prev.deque];
   const newBoard = deepCopy2DArray(prev.maze);
 
   while (stack.length) {
-    const currentPoint = stack.at(-1)!;
-    newBoard[getY(currentPoint)][getX(currentPoint)] = "VISITED";
-    if (didReach(currentPoint, getEnd(newBoard)))
+    newBoard[getY(currentPointInDFS(stack))][getX(currentPointInDFS(stack))] =
+      "VISITED";
+    if (didReach(currentPointInDFS(stack), getEnd(newBoard)))
       return { ...prev, maze: newBoard };
 
     for (const direction of directions) {
       if (
         !isValidBlock(
-          nextPoint(currentPoint, direction),
+          nextPoint(currentPointInDFS(stack), direction),
           getEnd(newBoard),
           newBoard
         )
       )
         continue;
 
-      newBoard[getY(nextPoint(currentPoint, direction))][
-        getX(nextPoint(currentPoint, direction))
+      newBoard[getY(nextPoint(currentPointInDFS(stack), direction))][
+        getX(nextPoint(currentPointInDFS(stack), direction))
       ] = "ACTIVE";
 
       return {
         ...prev,
         maze: newBoard,
-        deque: [...stack, nextPoint(currentPoint, direction)],
+        deque: [...stack, nextPoint(currentPointInDFS(stack), direction)],
       };
     }
     stack.pop();
