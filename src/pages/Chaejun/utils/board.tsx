@@ -34,6 +34,12 @@ function getRows(rows: number | undefined, prevRows: number) {
 function getColumns(columns: number | undefined, prevColumns: number) {
   return columns ?? prevColumns;
 }
+export function getEnd(newBoard: BlockStatusType[][]): BlockInterface {
+  return {
+    x: newBoard.length - 1,
+    y: newBoard[0].length - 1,
+  };
+}
 export function initializeBoard({
   prev: { rows: prevRows, columns: prevColumns },
   rows,

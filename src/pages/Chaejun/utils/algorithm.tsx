@@ -3,6 +3,7 @@ import {
   BoardInterface,
   deepCopy2DArray,
   didReach,
+  getEnd,
   isValidBlock,
 } from "./board";
 
@@ -26,18 +27,20 @@ function nextPoint(
 export function DFS(prev: BoardInterface): BoardInterface {
   const stack: BlockInterface[] = [...prev.deque];
   const newBoard = deepCopy2DArray(prev.maze);
-  const end: BlockInterface = {
-    y: newBoard.length - 1,
-    x: newBoard[0].length - 1,
-  };
 
   while (stack.length) {
     const currentPoint = stack.at(-1)!;
     newBoard[currentPoint.y][currentPoint.x] = "VISITED";
-    if (didReach(currentPoint, end)) return { ...prev, maze: newBoard };
+    if (didReach(currentPoint, getEnd(newBoard))) return { ...prev };
 
     for (const direction of directions) {
-      if (!isValidBlock(nextPoint(currentPoint, direction), end, newBoard))
+      if (
+        !isValidBlock(
+          nextPoint(currentPoint, direction),
+          getEnd(newBoard),
+          newBoard
+        )
+      )
         continue;
 
       newBoard[nextPoint(currentPoint, direction).y][
@@ -59,18 +62,21 @@ export function BFS(prev: BoardInterface): BoardInterface {
   const queue = [...prev.deque];
   const currentQueue: BlockInterface[] = [];
   const newBoard = deepCopy2DArray(prev.maze);
-  const end: BlockInterface = {
-    x: newBoard.length - 1,
-    y: newBoard[0].length - 1,
-  };
 
   while (queue.length) {
     const currentPoint = queue.shift()!;
     newBoard[currentPoint.y][currentPoint.x] = "VISITED";
-    if (didReach(currentPoint, end)) return { ...prev, maze: newBoard };
+    if (didReach(currentPoint, getEnd(newBoard)))
+      return { ...prev, maze: newBoard };
 
     for (const direction of directions) {
-      if (!isValidBlock(nextPoint(currentPoint, direction), end, newBoard))
+      if (
+        !isValidBlock(
+          nextPoint(currentPoint, direction),
+          getEnd(newBoard),
+          newBoard
+        )
+      )
         continue;
 
       newBoard[nextPoint(currentPoint, direction).y][
