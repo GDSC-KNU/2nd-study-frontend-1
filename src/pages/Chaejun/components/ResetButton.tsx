@@ -11,9 +11,13 @@ export function ResetButton() {
     <button
       type="button"
       className="grow rounded-md border-2 border-black"
-      onClick={() => initializeBoard({ setBoard })}
+      onClick={onChangeHandler}
     >
       Reset
     </button>
   );
+
+  function onChangeHandler() {
+    setBoard((prev) => initializeBoard({ prev }));
+  }
 }

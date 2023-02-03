@@ -35,31 +35,24 @@ function getColumns(columns: number | undefined, prevColumns: number) {
   return columns ?? prevColumns;
 }
 export function initializeBoard({
+  prev: { rows: prevRows, columns: prevColumns },
   rows,
   columns,
 }: {
-  setBoard: React.Dispatch<React.SetStateAction<BoardInterface>>;
+  prev: BoardInterface;
   rows?: number;
   columns?: number;
 }) {
-  setBoard((prev) => {
-    return {
-      ...prev,
-      rows: getRows(rows, prev),
-      columns: getColumns(columns, prev),
-      maze: create2DArray(getRows(rows, prev), getColumns(columns, prev)),
-      deque: [{ x: 0, y: 0 }],
-    };
-  });
+  return {
+    rows: getRows(rows, prevRows),
+    columns: getColumns(columns, prevColumns),
+    maze: create2DArray(
+      getRows(rows, prevRows),
+      getColumns(columns, prevColumns)
+    ),
+    deque: [{ x: 0, y: 0 }],
+  };
 }
-function getColumns(columns: number | undefined, prev: BoardInterface) {
-  return columns ?? prev.columns;
-}
-
-function getRows(rows: number | undefined, prev: BoardInterface) {
-  return rows ?? prev.rows;
-}
-
 export function randomlyBlockOrEmpty() {
   const randomNumber = Math.random();
   if (randomNumber > 0.3) return "EMPTY";

@@ -23,10 +23,14 @@ export function NumberInput({
       <input
         className="w-full rounded-md border-2 border-black py-2 px-3"
         type="number"
-        onChange={(e) => initializeBoard({ setBoard, [label]: safeInput(e) })}
+        onChange={onChangeHandler}
         value={board[label]}
         min="0"
       />
     </div>
   );
+
+  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    setBoard((prev) => initializeBoard({ prev, [label]: safeInput(e) }));
+  }
 }
