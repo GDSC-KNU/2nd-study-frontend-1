@@ -25,12 +25,11 @@ export function DFS(prev: BoardInterface): BoardInterface {
     maze: deepCopy2DArray(prev.maze),
     deque: [...prev.deque],
   };
-  const stack = getStack(newBoard);
 
   while (getStack(newBoard).length) {
     setCurrentPointVisited(newBoard, currentPointInDFS(getStack(newBoard)));
     if (didReach(currentPointInDFS(getStack(newBoard)), getEnd(newBoard)))
-      return { ...newBoard, maze: newBoard.maze };
+      return { ...newBoard };
 
     if (!getNextDirection(currentPointInDFS(getStack(newBoard)), prev)) {
       getStack(newBoard).pop();
