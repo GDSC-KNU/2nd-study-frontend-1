@@ -20,30 +20,35 @@ function currentPointInDFS(stack: BlockInterface[]) {
 
 export function DFS(prev: BoardInterface): BoardInterface {
   const stack: BlockInterface[] = [...prev.deque];
-  const newBoard = deepCopy2DArray(prev.maze);
+  const newBoard = {
+    rows: prev.rows,
+    columns: prev.columns,
+    maze: deepCopy2DArray(prev.maze),
+    deque: [...prev.deque],
+  };
 
   while (stack.length) {
-    newBoard[getY(currentPointInDFS(stack))][getX(currentPointInDFS(stack))] =
-      "VISITED";
-    if (didReach(currentPointInDFS(stack), getEnd(prev)))
-      return { ...prev, maze: newBoard };
+    setCurrentPointVisited(newBoard, currentPointInDFS(stack));
+    if (didReach(currentPointInDFS(stack), getEnd(newBoard)))
+      return { ...newBoard, maze: newBoard.maze };
 
-    for (const direction of directions) {
-      if (!isValidBlock(currentPointInDFS(stack), direction, prev)) continue;
+    const direction = directions.find((direction) =>
+      isValidBlock(currentPointInDFS(stack), direction, newBoard)
+    );
 
-      newBoard[getY(nextPoint(currentPointInDFS(stack), direction))][
-        getX(nextPoint(currentPointInDFS(stack), direction))
-      ] = "ACTIVE";
-
-      return {
-        ...prev,
-        maze: newBoard,
-        deque: [...stack, nextPoint(currentPointInDFS(stack), direction)],
-      };
+    if (direction === undefined) {
+      stack.pop();
+      continue;
     }
-    stack.pop();
+
+    setCurrentPointActive(newBoard, currentPointInDFS(stack), direction);
+
+    return {
+      ...newBoard,
+      deque: [...stack, nextPoint(currentPointInDFS(stack), direction)],
+    };
   }
-  return { ...prev, maze: newBoard, deque: stack };
+  return { ...prev, maze: newBoard.maze, deque: stack };
 }
 
 export function BFS(prev: BoardInterface): BoardInterface {
