@@ -50,26 +50,37 @@ export function DFS(prev: BoardInterface): BoardInterface {
 }
 
 export function BFS(prev: BoardInterface): BoardInterface {
-  const queue = [...prev.deque];
-  const currentQueue: BlockInterface[] = [];
-  const newBoard = deepCopy2DArray(prev.maze);
+  return [...prev.deque].reduce(
+    (accBoard: BoardInterface, currentPoint: BlockInterface) => {
+      accBoard.maze[getY(currentPoint)][getX(currentPoint)] = "VISITED";
 
-  while (queue.length) {
-    newBoard[getY(currentPointInBFS(queue))][getX(currentPointInBFS(queue))] =
-      "VISITED";
-    if (didReach(currentPointInBFS(queue), getEnd(prev)))
-      return { ...prev, maze: newBoard };
+      if (didReach(currentPoint, getEnd(accBoard)))
+        return { ...accBoard, deque: [] };
 
-    possibleDirections(currentPointInBFS(queue), prev).forEach((direction) => {
-      newBoard[getY(nextPoint(currentPointInBFS(queue), direction))][
-        getX(nextPoint(currentPointInBFS(queue), direction))
-      ] = "ACTIVE";
-      currentQueue.push(nextPoint(currentPointInBFS(queue), direction));
-    });
-
-    queue.shift();
-  }
-  return { ...prev, maze: newBoard, deque: [...currentQueue] };
+      return {
+        ...accBoard,
+        deque: [
+          ...accBoard.deque,
+          ...possibleDirections(currentPoint, accBoard).reduce(
+            (accQueue: BlockInterface[], direction: directions) => {
+              accBoard.maze[getY(nextPoint(currentPoint, direction))][
+                getX(nextPoint(currentPoint, direction))
+              ] = "ACTIVE";
+              accQueue.push(nextPoint(currentPoint, direction));
+              return accQueue;
+            },
+            []
+          ),
+        ],
+      };
+    },
+    {
+      columns: prev.columns,
+      rows: prev.rows,
+      maze: deepCopy2DArray(prev.maze),
+      deque: [],
+    }
+  );
 }
 
 function possibleDirections(
