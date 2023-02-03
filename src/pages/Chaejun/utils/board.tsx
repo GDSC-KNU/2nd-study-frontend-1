@@ -14,6 +14,13 @@ export interface BoardContextInterface {
   board: BoardInterface;
   setBoard: React.Dispatch<React.SetStateAction<BoardInterface>>;
 }
+export const directions = [
+  { dir: "DOWN", x: 0, y: 1 },
+  { dir: "RIGHT", x: 1, y: 0 },
+  { dir: "UP", x: 0, y: -1 },
+  { dir: "LEFT", x: -1, y: 0 },
+] as const;
+export type directionsType = typeof directions[number];
 
 export function deepCopy2DArray(maze: BlockStatusType[][]) {
   return maze.map((row) => row.slice());
@@ -91,15 +98,6 @@ export function isVisited(block: BlockStatusType) {
 export function isBlocked(block: BlockStatusType) {
   return block === "BLOCKED";
 }
-
-export const directions = [
-  { dir: "DOWN", x: 0, y: 1 },
-  { dir: "RIGHT", x: 1, y: 0 },
-  { dir: "UP", x: 0, y: -1 },
-  { dir: "LEFT", x: -1, y: 0 },
-] as const;
-export type directionsType = typeof directions[number];
-
 export function isValidBlock(
   currentPoint: BlockInterface,
   direction: directionsType,
@@ -131,4 +129,19 @@ export function nextPoint(
     x: currentPoint.x + option.x,
     y: currentPoint.y + option.y,
   };
+}
+export function setCurrentPointActive(
+  context: BoardInterface,
+  currentPoint: BlockInterface,
+  direction: directionsType
+) {
+  context.maze[getY(nextPoint(currentPoint, direction))][
+    getX(nextPoint(currentPoint, direction))
+  ] = "ACTIVE";
+}
+export function setCurrentPointVisited(
+  context: BoardInterface,
+  currentPoint: BlockInterface
+) {
+  context.maze[getY(currentPoint)][getX(currentPoint)] = "VISITED";
 }

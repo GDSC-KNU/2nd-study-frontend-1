@@ -7,7 +7,8 @@ import { ResetButton } from "./components/ResetButton";
 import { SetMazeButton } from "./components/SetMazeButton";
 import { Table } from "./components/Table";
 import { create2DArray, BoardInterface } from "./utils/board";
-import { BFS, DFS } from "./utils/algorithm";
+import { DFS } from "./utils/DFS";
+import { BFS } from "./utils/BFS";
 
 const Chaejun = () => {
   const [board, setBoard] = useState<BoardInterface>({
