@@ -47,14 +47,14 @@ export function DFS(prev: BoardInterface): BoardInterface {
   while (stack.length) {
     newBoard[getY(currentPointInDFS(stack))][getX(currentPointInDFS(stack))] =
       "VISITED";
-    if (didReach(currentPointInDFS(stack), getEnd(newBoard)))
+    if (didReach(currentPointInDFS(stack), getEnd(prev)))
       return { ...prev, maze: newBoard };
 
     for (const direction of directions) {
       if (
         !isValidBlock(
           nextPoint(currentPointInDFS(stack), direction),
-          getEnd(newBoard),
+          getEnd(prev),
           newBoard
         )
       )
@@ -83,14 +83,14 @@ export function BFS(prev: BoardInterface): BoardInterface {
   while (queue.length) {
     newBoard[getY(currentPointInBFS(queue))][getX(currentPointInBFS(queue))] =
       "VISITED";
-    if (didReach(currentPointInBFS(queue), getEnd(newBoard)))
+    if (didReach(currentPointInBFS(queue), getEnd(prev)))
       return { ...prev, maze: newBoard };
 
     for (const direction of directions) {
       if (
         !isValidBlock(
           nextPoint(currentPointInBFS(queue), direction),
-          getEnd(newBoard),
+          getEnd(prev),
           newBoard
         )
       )

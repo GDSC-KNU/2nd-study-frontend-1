@@ -34,10 +34,10 @@ function getRows(rows: number | undefined, prevRows: number) {
 function getColumns(columns: number | undefined, prevColumns: number) {
   return columns ?? prevColumns;
 }
-export function getEnd(newBoard: BlockStatusType[][]): BlockInterface {
+export function getEnd(newBoard: BoardInterface): BlockInterface {
   return {
-    x: newBoard.length - 1,
-    y: newBoard[0].length - 1,
+    y: newBoard.rows - 1,
+    x: newBoard.columns - 1,
   };
 }
 export function initializeBoard({
