@@ -28,8 +28,13 @@ export function create2DArray(rows: number, columns: number) {
   newBoard[0][0] = "VISITED";
   return newBoard;
 }
+function getRows(rows: number | undefined, prevRows: number) {
+  return rows ?? prevRows;
+}
+function getColumns(columns: number | undefined, prevColumns: number) {
+  return columns ?? prevColumns;
+}
 export function initializeBoard({
-  setBoard,
   rows,
   columns,
 }: {
@@ -38,18 +43,23 @@ export function initializeBoard({
   columns?: number;
 }) {
   setBoard((prev) => {
-    const newRows = rows ?? prev.rows;
-    const newColumns = columns ?? prev.columns;
-    const newBoard = create2DArray(newRows, newColumns);
     return {
       ...prev,
-      rows: newRows,
-      columns: newColumns,
-      maze: newBoard,
+      rows: getRows(rows, prev),
+      columns: getColumns(columns, prev),
+      maze: create2DArray(getRows(rows, prev), getColumns(columns, prev)),
       deque: [{ x: 0, y: 0 }],
     };
   });
 }
+function getColumns(columns: number | undefined, prev: BoardInterface) {
+  return columns ?? prev.columns;
+}
+
+function getRows(rows: number | undefined, prev: BoardInterface) {
+  return rows ?? prev.rows;
+}
+
 export function randomlyBlockOrEmpty() {
   const randomNumber = Math.random();
   if (randomNumber > 0.3) return "EMPTY";
