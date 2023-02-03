@@ -53,21 +53,13 @@ export function BFS(prev: BoardInterface): BoardInterface {
   return [...prev.deque].reduce(
     (accBoard: BoardInterface, currentPoint: BlockInterface) => {
       setCurrentPointVisited(accBoard, currentPoint);
+
       if (didReach(currentPoint, getEnd(accBoard)))
         return { ...accBoard, deque: [] };
+
       return {
         ...accBoard,
-        deque: [
-          ...accBoard.deque,
-          ...possibleDirections(currentPoint, accBoard).reduce(
-            (accQueue: BlockInterface[], direction: directions) => {
-              setCurrentPointActive(accBoard, currentPoint, direction);
-              accQueue.push(nextPoint(currentPoint, direction));
-              return accQueue;
-            },
-            []
-          ),
-        ],
+        deque: [...accBoard.deque, ...getNextQueue(currentPoint, accBoard)],
       };
     },
     {
@@ -76,6 +68,17 @@ export function BFS(prev: BoardInterface): BoardInterface {
       maze: deepCopy2DArray(prev.maze),
       deque: [],
     }
+  );
+}
+
+function getNextQueue(currentPoint: BlockInterface, accBoard: BoardInterface) {
+  return possibleDirections(currentPoint, accBoard).reduce(
+    (accQueue: BlockInterface[], direction: directions) => {
+      setCurrentPointActive(accBoard, currentPoint, direction);
+      accQueue.push(nextPoint(currentPoint, direction));
+      return accQueue;
+    },
+    []
   );
 }
 
