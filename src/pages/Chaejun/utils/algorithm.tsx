@@ -86,23 +86,27 @@ export function BFS(prev: BoardInterface): BoardInterface {
     if (didReach(currentPointInBFS(queue), getEnd(prev)))
       return { ...prev, maze: newBoard };
 
-    for (const direction of directions) {
-      if (
-        !isValidBlock(
-          nextPoint(currentPointInBFS(queue), direction),
-          getEnd(prev),
-          newBoard
-        )
-      )
-        continue;
-
+    possibleDirections(queue, prev, newBoard).forEach((direction) => {
       newBoard[getY(nextPoint(currentPointInBFS(queue), direction))][
         getX(nextPoint(currentPointInBFS(queue), direction))
       ] = "ACTIVE";
-
       currentQueue.push(nextPoint(currentPointInBFS(queue), direction));
-    }
+    });
+
     queue.shift();
   }
   return { ...prev, maze: newBoard, deque: [...currentQueue] };
+}
+function possibleDirections(
+  queue: BlockInterface[],
+  prev: BoardInterface,
+  newBoard: import("/Users/chaejun/study/2nd-study-frontend-1/src/pages/Chaejun/utils/board").BlockStatusType[][]
+) {
+  return directions.filter((direction) =>
+    isValidBlock(
+      nextPoint(currentPointInBFS(queue), direction),
+      getEnd(prev),
+      newBoard
+    )
+  );
 }
