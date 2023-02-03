@@ -92,13 +92,43 @@ export function isBlocked(block: BlockStatusType) {
   return block === "BLOCKED";
 }
 export function isValidBlock(
-  nextPoint: BlockInterface,
-  end: BlockInterface,
-  board: BlockStatusType[][]
+  currentPoint: BlockInterface,
+  direction: typeof directions[number],
+  board: BoardInterface
 ) {
   return (
-    !outOfBoard(nextPoint, end) &&
-    !isVisited(board[nextPoint.y][nextPoint.x]) &&
-    !isBlocked(board[nextPoint.y][nextPoint.x])
+    !outOfBoard(nextPoint(currentPoint, direction), getEnd(board)) &&
+    !isVisited(getBlock(nextPoint(currentPoint, direction), board)) &&
+    !isBlocked(getBlock(nextPoint(currentPoint, direction), board))
   );
+}
+
+export function getBlock(
+  currentPoint: BlockInterface,
+  board: BoardInterface
+): BlockStatusType {
+  return board.maze[getY(currentPoint)][getX(currentPoint)];
+}
+
+export const directions = [
+  { dir: "DOWN", x: 0, y: 1 },
+  { dir: "RIGHT", x: 1, y: 0 },
+  { dir: "UP", x: 0, y: -1 },
+  { dir: "LEFT", x: -1, y: 0 },
+] as const;
+
+export function getY(currentPoint: BlockInterface): number {
+  return currentPoint.y;
+}
+export function getX(currentPoint: BlockInterface): number {
+  return currentPoint.x;
+}
+export function nextPoint(
+  currentPoint: BlockInterface,
+  option: typeof directions[number]
+): BlockInterface {
+  return {
+    x: currentPoint.x + option.x,
+    y: currentPoint.y + option.y,
+  };
 }

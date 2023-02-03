@@ -3,32 +3,13 @@ import {
   BoardInterface,
   deepCopy2DArray,
   didReach,
+  directions,
   getEnd,
+  getX,
+  getY,
   isValidBlock,
+  nextPoint,
 } from "./board";
-
-const directions = [
-  { dir: "DOWN", x: 0, y: 1 },
-  { dir: "RIGHT", x: 1, y: 0 },
-  { dir: "UP", x: 0, y: -1 },
-  { dir: "LEFT", x: -1, y: 0 },
-] as const;
-
-function getY(currentPoint: BlockInterface): number {
-  return currentPoint.y;
-}
-function getX(currentPoint: BlockInterface): number {
-  return currentPoint.x;
-}
-function nextPoint(
-  currentPoint: BlockInterface,
-  option: typeof directions[number]
-): BlockInterface {
-  return {
-    x: currentPoint.x + option.x,
-    y: currentPoint.y + option.y,
-  };
-}
 function currentPointInDFS(stack: BlockInterface[]) {
   // top while loop checks the length of stack
   // so it is safe to use stack.at(-1)
@@ -51,14 +32,7 @@ export function DFS(prev: BoardInterface): BoardInterface {
       return { ...prev, maze: newBoard };
 
     for (const direction of directions) {
-      if (
-        !isValidBlock(
-          nextPoint(currentPointInDFS(stack), direction),
-          getEnd(prev),
-          newBoard
-        )
-      )
-        continue;
+      if (!isValidBlock(currentPointInDFS(stack), direction, prev)) continue;
 
       newBoard[getY(nextPoint(currentPointInDFS(stack), direction))][
         getX(nextPoint(currentPointInDFS(stack), direction))
@@ -86,7 +60,7 @@ export function BFS(prev: BoardInterface): BoardInterface {
     if (didReach(currentPointInBFS(queue), getEnd(prev)))
       return { ...prev, maze: newBoard };
 
-    possibleDirections(queue, prev, newBoard).forEach((direction) => {
+    possibleDirections(currentPointInBFS(queue), prev).forEach((direction) => {
       newBoard[getY(nextPoint(currentPointInBFS(queue), direction))][
         getX(nextPoint(currentPointInBFS(queue), direction))
       ] = "ACTIVE";
@@ -97,16 +71,12 @@ export function BFS(prev: BoardInterface): BoardInterface {
   }
   return { ...prev, maze: newBoard, deque: [...currentQueue] };
 }
+
 function possibleDirections(
-  queue: BlockInterface[],
-  prev: BoardInterface,
-  newBoard: import("/Users/chaejun/study/2nd-study-frontend-1/src/pages/Chaejun/utils/board").BlockStatusType[][]
+  currentPoint: BlockInterface,
+  board: BoardInterface
 ) {
   return directions.filter((direction) =>
-    isValidBlock(
-      nextPoint(currentPointInBFS(queue), direction),
-      getEnd(prev),
-      newBoard
-    )
+    isValidBlock(currentPoint, direction, board)
   );
 }
