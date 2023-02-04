@@ -8,8 +8,8 @@ import {
   getEnd,
   isValidBlock,
   nextPoint,
-  setCurrentPointActive,
-  setCurrentPointVisited,
+  setActive,
+  setVisited,
 } from "./board";
 
 function currentPointInDFS(stack: BlockInterface[]) {
@@ -34,7 +34,7 @@ function getNextPathHistory(
   previousContext: BoardInterface
 ): BlockInterface[] {
   while (getStack(newBoard).length) {
-    setCurrentPointVisited(newBoard, currentPointInDFS(getStack(newBoard)));
+    setVisited(newBoard, currentPointInDFS(getStack(newBoard)));
     if (didReach(currentPointInDFS(getStack(newBoard)), getEnd(newBoard)))
       return getStack(newBoard);
 
@@ -45,7 +45,7 @@ function getNextPathHistory(
       continue;
     }
 
-    setCurrentPointActive(
+    setActive(
       newBoard,
       currentPointInDFS(getStack(newBoard)),
       getNextDirection(currentPointInDFS(getStack(newBoard)), previousContext)!

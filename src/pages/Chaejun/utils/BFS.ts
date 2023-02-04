@@ -9,8 +9,8 @@ import {
   getEnd,
   isValidBlock,
   nextPoint,
-  setCurrentPointActive,
-  setCurrentPointVisited,
+  setActive,
+  setVisited,
 } from "./board";
 
 export function BFS(prev: BoardInterface): BoardInterface {
@@ -29,7 +29,7 @@ const getNextBatchOfBlocksToVisit = (
   columns: number;
   maze: BlockStatusType[][];
 } => {
-  setCurrentPointVisited(previousContext, currentPoint);
+  setVisited(previousContext, currentPoint);
 
   if (didReach(currentPoint, getEnd(previousContext)))
     return { ...previousContext, deque: [] };
@@ -62,7 +62,7 @@ function getNextBlocksToVisit(
 ) {
   return possibleDirections(currentPoint, previousContext).reduce(
     (accQueue: BlockInterface[], direction: directionsType) => {
-      setCurrentPointActive(previousContext, currentPoint, direction);
+      setActive(previousContext, currentPoint, direction);
       accQueue.push(nextPoint(currentPoint, direction));
       return accQueue;
     },

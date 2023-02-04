@@ -130,7 +130,7 @@ export function nextPoint(
     y: currentPoint.y + option.y,
   };
 }
-export function setCurrentPointActive(
+export function setActive(
   context: BoardInterface,
   currentPoint: BlockInterface,
   direction: directionsType
@@ -139,7 +139,7 @@ export function setCurrentPointActive(
     getX(nextPoint(currentPoint, direction))
   ] = "ACTIVE";
 }
-export function setCurrentPointVisited(
+export function setVisited(
   context: BoardInterface,
   currentPoint: BlockInterface
 ) {
