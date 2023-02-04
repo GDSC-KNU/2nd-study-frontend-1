@@ -38,7 +38,18 @@ function getNextPathHistory(
   newBoard: BoardInterface,
   previousContext: BoardInterface
 ): BlockInterface[] {
-  const currentPoint = currentPointInDFS(getStack(newBoard));
+  return reachedEnd(
+    currentPointInDFS(getStack(newBoard)),
+    newBoard,
+    previousContext
+  );
+}
+
+function reachedEnd(
+  currentPoint: BlockInterface | undefined,
+  newBoard: BoardInterface,
+  previousContext: BoardInterface
+) {
   if (currentPoint === undefined) return [];
 
   setVisited(newBoard, currentPoint);
