@@ -5,6 +5,7 @@ import {
   deepCopy2DArray,
   didReach,
   directions,
+  directionsType,
   getEnd,
   isValidBlock,
   nextPoint,
@@ -13,9 +14,7 @@ import {
 } from "./board";
 
 function currentPointInDFS(stack: BlockInterface[]) {
-  // top while loop checks the length of stack
-  // so it is safe to use stack.at(-1)
-  return stack.at(-1)!;
+  return stack.at(-1);
 }
 
 export function DFS(prev: BoardInterface): BoardInterface {
@@ -39,36 +38,48 @@ function getNextPathHistory(
   newBoard: BoardInterface,
   previousContext: BoardInterface
 ): BlockInterface[] {
-  while (getStack(newBoard).length) {
-    setVisited(newBoard, currentPointInDFS(getStack(newBoard)));
-    if (didReach(currentPointInDFS(getStack(newBoard)), getEnd(newBoard)))
-      return getStack(newBoard);
+  const currentPoint = currentPointInDFS(getStack(newBoard));
+  if (currentPoint === undefined) return [];
 
-    if (
-      !getNextDirection(currentPointInDFS(getStack(newBoard)), previousContext)
-    ) {
-      getStack(newBoard).pop();
-      continue;
-    }
+  setVisited(newBoard, currentPoint);
 
-    setActive(
-      newBoard,
-      currentPointInDFS(getStack(newBoard)),
-      getNextDirection(currentPointInDFS(getStack(newBoard)), previousContext)!
-    );
+  if (didReach(currentPoint, getEnd(newBoard)))
+    return getStack(previousContext);
 
-    return [
-      ...getStack(newBoard),
-      nextPoint(
-        currentPointInDFS(getStack(newBoard)),
-        getNextDirection(
-          currentPointInDFS(getStack(newBoard)),
-          previousContext
-        )!
-      ),
-    ];
-  }
-  return [];
+  return pushNextDirectionOrBacktrack(
+    currentPoint,
+    getNextDirection(currentPoint, previousContext),
+    newBoard,
+    previousContext
+  );
+}
+
+function pushNextDirectionOrBacktrack(
+  currentPoint: BlockInterface,
+  nextDirection: directionsType | null,
+  newBoard: BoardInterface,
+  previousContext: BoardInterface
+) {
+  if (!nextDirection) return backtrack(newBoard, previousContext);
+
+  setActive(newBoard, currentPoint, nextDirection);
+
+  return pushNextDirection(newBoard, nextDirection);
+}
+
+function pushNextDirection(
+  newBoard: BoardInterface,
+  nextDirection: directionsType
+) {
+  return [
+    ...getStack(newBoard),
+    nextPoint(currentPointInDFS(getStack(newBoard))!, nextDirection),
+  ];
+}
+
+function backtrack(newBoard: BoardInterface, previousContext: BoardInterface) {
+  getStack(newBoard).pop();
+  return getNextPathHistory(newBoard, previousContext);
 }
 
 function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
