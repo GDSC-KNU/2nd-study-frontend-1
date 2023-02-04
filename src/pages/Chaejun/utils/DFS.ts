@@ -73,7 +73,7 @@ function pushNextDirectionOrBacktrack(
 ) {
   if (!nextDirection) return backtrack(newBoard, previousContext);
 
-  setActive(newBoard, currentPoint, nextDirection);
+  setActive(newBoard, nextPoint(currentPoint, nextDirection));
 
   return pushNextDirection(newBoard, nextPoint(currentPoint, nextDirection));
 }

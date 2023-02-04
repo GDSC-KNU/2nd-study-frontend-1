@@ -62,7 +62,7 @@ function getNextBlocksToVisit(
 ) {
   return possibleDirections(currentPoint, previousContext).reduce(
     (accQueue: BlockInterface[], direction: directionsType) => {
-      setActive(previousContext, currentPoint, direction);
+      setActive(previousContext, nextPoint(currentPoint, direction));
       accQueue.push(nextPoint(currentPoint, direction));
       return accQueue;
     },

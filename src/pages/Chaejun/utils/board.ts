@@ -130,14 +130,8 @@ export function nextPoint(
     y: currentPoint.y + option.y,
   };
 }
-export function setActive(
-  context: BoardInterface,
-  currentPoint: BlockInterface,
-  direction: directionsType
-) {
-  context.maze[getY(nextPoint(currentPoint, direction))][
-    getX(nextPoint(currentPoint, direction))
-  ] = "ACTIVE";
+export function setActive(context: BoardInterface, nextPoint: BlockInterface) {
+  context.maze[getY(nextPoint)][getX(nextPoint)] = "ACTIVE";
 }
 export function setVisited(
   context: BoardInterface,
