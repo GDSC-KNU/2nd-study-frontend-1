@@ -21,7 +21,11 @@ export function DFS(prev: BoardInterface): BoardInterface {
   const newBoard = deepCopyBoard(prev);
   return {
     ...newBoard,
-    deque: getNextPathHistory(newBoard, prev),
+    deque: getNextPathHistory(
+      currentPointInDFS(getStack(newBoard)),
+      newBoard,
+      prev
+    ),
   };
 }
 
@@ -35,17 +39,6 @@ function deepCopyBoard(prev: BoardInterface): BoardInterface {
 }
 
 function getNextPathHistory(
-  newBoard: BoardInterface,
-  previousContext: BoardInterface
-): BlockInterface[] {
-  return reachedEnd(
-    currentPointInDFS(getStack(newBoard)),
-    newBoard,
-    previousContext
-  );
-}
-
-function reachedEnd(
   currentPoint: BlockInterface | undefined,
   newBoard: BoardInterface,
   previousContext: BoardInterface
@@ -70,10 +63,8 @@ function pushNextDirectionOrBacktrack(
   nextDirection: directionsType | null,
   newBoard: BoardInterface,
   previousContext: BoardInterface
-) {
+): BlockInterface[] {
   if (!nextDirection) return backtrack(newBoard, previousContext);
-
-  setActive(newBoard, nextPoint(currentPoint, nextDirection));
 
   return pushNextDirection(newBoard, nextPoint(currentPoint, nextDirection));
 }
@@ -81,13 +72,21 @@ function pushNextDirectionOrBacktrack(
 function pushNextDirection(
   newBoard: BoardInterface,
   nextPoint: BlockInterface
-) {
+): BlockInterface[] {
+  setActive(newBoard, nextPoint);
   return [...getStack(newBoard), nextPoint];
 }
 
-function backtrack(newBoard: BoardInterface, previousContext: BoardInterface) {
+function backtrack(
+  newBoard: BoardInterface,
+  previousContext: BoardInterface
+): BlockInterface[] {
   getStack(newBoard).pop();
-  return getNextPathHistory(newBoard, previousContext);
+  return getNextPathHistory(
+    currentPointInDFS(getStack(newBoard)),
+    newBoard,
+    previousContext
+  );
 }
 
 function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
