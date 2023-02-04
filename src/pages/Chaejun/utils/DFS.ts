@@ -75,17 +75,14 @@ function pushNextDirectionOrBacktrack(
 
   setActive(newBoard, currentPoint, nextDirection);
 
-  return pushNextDirection(newBoard, nextDirection);
+  return pushNextDirection(newBoard, nextPoint(currentPoint, nextDirection));
 }
 
 function pushNextDirection(
   newBoard: BoardInterface,
-  nextDirection: directionsType
+  nextPoint: BlockInterface
 ) {
-  return [
-    ...getStack(newBoard),
-    nextPoint(currentPointInDFS(getStack(newBoard))!, nextDirection),
-  ];
+  return [...getStack(newBoard), nextPoint];
 }
 
 function backtrack(newBoard: BoardInterface, previousContext: BoardInterface) {
