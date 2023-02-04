@@ -19,14 +19,20 @@ function currentPointInDFS(stack: BlockInterface[]) {
 }
 
 export function DFS(prev: BoardInterface): BoardInterface {
-  const newBoard: BoardInterface = {
+  const newBoard = deepCopyBoard(prev);
+  return {
+    ...newBoard,
+    deque: getNextPathHistory(newBoard, prev),
+  };
+}
+
+function deepCopyBoard(prev: BoardInterface): BoardInterface {
+  return {
     rows: prev.rows,
     columns: prev.columns,
     maze: deepCopy2DArray(prev.maze),
     deque: [...prev.deque],
   };
-
-  return { ...newBoard, deque: getNextPathHistory(newBoard, prev) };
 }
 
 function getNextPathHistory(
