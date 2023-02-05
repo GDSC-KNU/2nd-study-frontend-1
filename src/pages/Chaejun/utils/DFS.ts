@@ -103,5 +103,5 @@ function getStack(newBoard: {
   maze: BlockStatusType[][];
   deque: BlockInterface[];
 }) {
-  return newBoard.deque;
+  return [...newBoard.deque];
 }
