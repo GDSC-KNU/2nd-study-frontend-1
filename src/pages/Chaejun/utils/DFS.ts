@@ -13,10 +13,6 @@ import {
   setVisited,
 } from "./board";
 
-function currentPointInDFS(stack: BlockInterface[]) {
-  return stack.at(-1);
-}
-
 export function DFS(prev: BoardInterface): BoardInterface {
   const newBoard = deepCopyBoard(prev);
   return {
@@ -26,15 +22,6 @@ export function DFS(prev: BoardInterface): BoardInterface {
       newBoard,
       prev
     ),
-  };
-}
-
-function deepCopyBoard(prev: BoardInterface): BoardInterface {
-  return {
-    rows: prev.rows,
-    columns: prev.columns,
-    maze: deepCopy2DArray(prev.maze),
-    deque: [...prev.deque],
   };
 }
 
@@ -66,12 +53,12 @@ function pushNextDirectionOrBacktrack(
 ): BlockInterface[] {
   if (!nextDirection) return backtrack(newBoard, previousContext);
 
-  return pushNextDirection(nextPoint(currentPoint, nextDirection), newBoard);
+  return pushNextDirection(newBoard, nextPoint(currentPoint, nextDirection));
 }
 
 function pushNextDirection(
-  nextPoint: BlockInterface,
-  newBoard: BoardInterface
+  newBoard: BoardInterface,
+  nextPoint: BlockInterface
 ): BlockInterface[] {
   setActive(nextPoint, newBoard);
   return [...getStack(newBoard), nextPoint];
@@ -97,6 +84,10 @@ function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
   );
 }
 
+function currentPointInDFS(stack: BlockInterface[]) {
+  return stack.at(-1);
+}
+
 function getStack(newBoard: {
   rows: number;
   columns: number;
@@ -104,4 +95,13 @@ function getStack(newBoard: {
   deque: BlockInterface[];
 }) {
   return [...newBoard.deque];
+}
+
+function deepCopyBoard(prev: BoardInterface): BoardInterface {
+  return {
+    rows: prev.rows,
+    columns: prev.columns,
+    maze: deepCopy2DArray(prev.maze),
+    deque: [...prev.deque],
+  };
 }
