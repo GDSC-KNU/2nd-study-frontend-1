@@ -92,7 +92,7 @@ function backtrack(
 function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
   return (
     directions.find((direction) =>
-      isValidBlock(currentPoint, direction, prev)
+      isValidBlock(nextPoint(currentPoint, direction), prev)
     ) ?? null
   );
 }

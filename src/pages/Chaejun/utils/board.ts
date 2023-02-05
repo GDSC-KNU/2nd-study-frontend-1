@@ -98,15 +98,11 @@ export function isVisited(block: BlockStatusType) {
 export function isBlocked(block: BlockStatusType) {
   return block === "BLOCKED";
 }
-export function isValidBlock(
-  currentPoint: BlockInterface,
-  direction: directionsType,
-  board: BoardInterface
-) {
+export function isValidBlock(nextPoint: BlockInterface, board: BoardInterface) {
   return (
-    !outOfBoard(nextPoint(currentPoint, direction), getEnd(board)) &&
-    !isVisited(getBlock(nextPoint(currentPoint, direction), board)) &&
-    !isBlocked(getBlock(nextPoint(currentPoint, direction), board))
+    !outOfBoard(nextPoint, getEnd(board)) &&
+    !isVisited(getBlock(nextPoint, board)) &&
+    !isBlocked(getBlock(nextPoint, board))
   );
 }
 export function getBlock(

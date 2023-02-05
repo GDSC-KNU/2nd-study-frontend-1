@@ -74,6 +74,6 @@ export function possibleDirections(
   board: BoardInterface
 ) {
   return directions.filter((direction) =>
-    isValidBlock(currentPoint, direction, board)
+    isValidBlock(nextPoint(currentPoint, direction), board)
   );
 }
