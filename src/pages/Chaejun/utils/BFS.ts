@@ -56,10 +56,6 @@ function initialBoardWithEmptyDeque(prev: BoardInterface): BoardInterface {
   };
 }
 
-function getQueue(prev: BoardInterface) {
-  return [...prev.deque];
-}
-
 function getNextBlocksToVisit(
   possibleDirections: directionsType[],
   currentPoint: BlockInterface,
@@ -76,6 +72,7 @@ function getNextBlocksToVisit(
     []
   );
 }
+
 function visitNextPoint(
   accQueue: BlockInterface[],
   nextPoint: BlockInterface,
@@ -86,11 +83,15 @@ function visitNextPoint(
   return accQueue;
 }
 
-export function possibleDirections(
+function possibleDirections(
   currentPoint: BlockInterface,
   board: BoardInterface
 ) {
   return directions.filter((direction) =>
     isValidBlock(nextPoint(currentPoint, direction), board)
   );
+}
+
+function getQueue(prev: BoardInterface) {
+  return [...prev.deque];
 }
