@@ -38,7 +38,11 @@ const getNextBatchOfBlocksToVisit = (
     ...previousContext,
     deque: [
       ...previousContext.deque,
-      ...getNextBlocksToVisit(currentPoint, previousContext),
+      ...getNextBlocksToVisit(
+        possibleDirections(currentPoint, previousContext),
+        currentPoint,
+        previousContext
+      ),
     ],
   };
 };
@@ -57,10 +61,11 @@ function getQueue(prev: BoardInterface) {
 }
 
 function getNextBlocksToVisit(
+  possibleDirections: directionsType[],
   currentPoint: BlockInterface,
   previousContext: BoardInterface
 ) {
-  return possibleDirections(currentPoint, previousContext).reduce(
+  return possibleDirections.reduce(
     (accQueue: BlockInterface[], direction: directionsType) => {
       setActive(nextPoint(currentPoint, direction), previousContext);
       accQueue.push(nextPoint(currentPoint, direction));
