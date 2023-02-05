@@ -16,6 +16,11 @@ export function NumberInput({
   const { board, setBoard } = {
     ...useContext(BoardContext),
   } as BoardContextInterface;
+
+  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    setBoard((prev) => initializeBoard({ prev, [label]: safeInput(e) }));
+  }
+
   return (
     <div className="grow">
       <label className="block">{label}</label>
@@ -28,8 +33,4 @@ export function NumberInput({
       />
     </div>
   );
-
-  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    setBoard((prev) => initializeBoard({ prev, [label]: safeInput(e) }));
-  }
 }

@@ -11,15 +11,6 @@ export function SetMazeButton() {
   const { board, setBoard } = {
     ...useContext(BoardContext),
   } as BoardContextInterface;
-  return (
-    <button
-      type="button"
-      className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
-      onClick={() => setBoard(getRandomMaze)}
-    >
-      Set Maze
-    </button>
-  );
 
   function getRandomMaze(prev: BoardInterface) {
     const newBoard = deepCopy2DArray(prev.maze);
@@ -36,4 +27,14 @@ export function SetMazeButton() {
     }
     return { ...prev, maze: newBoard };
   }
+
+  return (
+    <button
+      type="button"
+      className="grow rounded-md border-2 border-black bg-black py-2 px-3 text-white"
+      onClick={() => setBoard(getRandomMaze)}
+    >
+      Set Maze
+    </button>
+  );
 }

@@ -7,6 +7,11 @@ export function ResetButton() {
   const { board, setBoard } = {
     ...useContext(BoardContext),
   } as BoardContextInterface;
+
+  function onChangeHandler() {
+    setBoard((prev) => initializeBoard({ prev }));
+  }
+
   return (
     <button
       type="button"
@@ -16,8 +21,4 @@ export function ResetButton() {
       Reset
     </button>
   );
-
-  function onChangeHandler() {
-    setBoard((prev) => initializeBoard({ prev }));
-  }
 }
