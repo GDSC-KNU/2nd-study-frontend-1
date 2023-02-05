@@ -45,7 +45,7 @@ function getNextPathHistory(
 ) {
   if (currentPoint === undefined) return [];
 
-  setVisited(newBoard, currentPoint);
+  setVisited(currentPoint, newBoard);
 
   if (didReach(currentPoint, getEnd(newBoard)))
     return getStack(previousContext);
@@ -66,14 +66,14 @@ function pushNextDirectionOrBacktrack(
 ): BlockInterface[] {
   if (!nextDirection) return backtrack(newBoard, previousContext);
 
-  return pushNextDirection(newBoard, nextPoint(currentPoint, nextDirection));
+  return pushNextDirection(nextPoint(currentPoint, nextDirection), newBoard);
 }
 
 function pushNextDirection(
-  newBoard: BoardInterface,
-  nextPoint: BlockInterface
+  nextPoint: BlockInterface,
+  newBoard: BoardInterface
 ): BlockInterface[] {
-  setActive(newBoard, nextPoint);
+  setActive(nextPoint, newBoard);
   return [...getStack(newBoard), nextPoint];
 }
 

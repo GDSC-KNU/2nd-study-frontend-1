@@ -29,7 +29,7 @@ const getNextBatchOfBlocksToVisit = (
   columns: number;
   maze: BlockStatusType[][];
 } => {
-  setVisited(previousContext, currentPoint);
+  setVisited(currentPoint, previousContext);
 
   if (didReach(currentPoint, getEnd(previousContext)))
     return { ...previousContext, deque: [] };
@@ -62,7 +62,7 @@ function getNextBlocksToVisit(
 ) {
   return possibleDirections(currentPoint, previousContext).reduce(
     (accQueue: BlockInterface[], direction: directionsType) => {
-      setActive(previousContext, nextPoint(currentPoint, direction));
+      setActive(nextPoint(currentPoint, direction), previousContext);
       accQueue.push(nextPoint(currentPoint, direction));
       return accQueue;
     },

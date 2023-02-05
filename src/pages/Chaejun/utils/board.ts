@@ -126,12 +126,12 @@ export function nextPoint(
     y: currentPoint.y + option.y,
   };
 }
-export function setActive(context: BoardInterface, nextPoint: BlockInterface) {
+export function setActive(nextPoint: BlockInterface, context: BoardInterface) {
   context.maze[getY(nextPoint)][getX(nextPoint)] = "ACTIVE";
 }
 export function setVisited(
-  context: BoardInterface,
-  currentPoint: BlockInterface
+  currentPoint: BlockInterface,
+  context: BoardInterface
 ) {
   context.maze[getY(currentPoint)][getX(currentPoint)] = "VISITED";
 }
