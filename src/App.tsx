@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./Index";
 import Chaejun from "./pages/Chaejun";
-import Dahye from "./pages/Dahye";
+import Dahye from "./pages/Dahye/Dahye";
 import Hyeonwook from "./pages/Hyeonwook";
 import Minju from "./pages/Minju";
 
