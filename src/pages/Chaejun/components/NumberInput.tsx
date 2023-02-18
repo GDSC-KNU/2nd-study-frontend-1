@@ -13,9 +13,7 @@ export function NumberInput({
     label: "columns" | "rows";
   };
 }): ReactElement {
-  const { board, setBoard } = {
-    ...useContext(BoardContext),
-  } as BoardContextInterface;
+  const { board, setBoard } = useContext(BoardContext) as BoardContextInterface;
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setBoard((prev) => initializeBoard({ prev, [label]: safeInput(e) }));
