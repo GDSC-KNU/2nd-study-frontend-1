@@ -68,7 +68,9 @@ export function initializeBoard({
 }
 export function randomlyBlockOrEmpty() {
   const randomNumber = Math.random();
-  if (randomNumber > 0.3) return "EMPTY";
+  if (randomNumber > 0.3) {
+    return "EMPTY";
+  }
   return "BLOCKED";
 }
 export function didReach(

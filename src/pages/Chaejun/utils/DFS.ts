@@ -30,12 +30,15 @@ function getNextPathHistory(
   newBoard: BoardInterface,
   previousContext: BoardInterface
 ) {
-  if (currentPoint === undefined) return [];
+  if (currentPoint === undefined) {
+    return [];
+  }
 
   setVisited(currentPoint, newBoard);
 
-  if (didReach(currentPoint, getEnd(newBoard)))
+  if (didReach(currentPoint, getEnd(newBoard))) {
     return getStack(previousContext);
+  }
 
   return pushNextDirectionOrBacktrack(
     currentPoint,
@@ -51,7 +54,9 @@ function pushNextDirectionOrBacktrack(
   newBoard: BoardInterface,
   previousContext: BoardInterface
 ): BlockInterface[] {
-  if (!nextDirection) return backtrack(newBoard, previousContext);
+  if (!nextDirection) {
+    return backtrack(newBoard, previousContext);
+  }
 
   return pushNextDirection(newBoard, nextPoint(currentPoint, nextDirection));
 }
@@ -78,8 +83,9 @@ function backtrack(
 
 function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
   for (const direction of directions) {
-    if (isValidBlock(nextPoint(currentPoint, direction), prev))
+    if (isValidBlock(nextPoint(currentPoint, direction), prev)) {
       return direction;
+    }
   }
   return null;
 }

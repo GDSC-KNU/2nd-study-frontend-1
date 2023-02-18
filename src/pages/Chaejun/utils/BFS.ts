@@ -31,8 +31,9 @@ const getNextBatchOfBlocksToVisit = (
 } => {
   setVisited(currentPoint, previousContext);
 
-  if (didReach(currentPoint, getEnd(previousContext)))
+  if (didReach(currentPoint, getEnd(previousContext))) {
     return { ...previousContext, deque: [] };
+  }
 
   return {
     ...previousContext,

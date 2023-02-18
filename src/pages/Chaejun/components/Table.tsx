@@ -42,7 +42,9 @@ function TableCell({
 
   const onClickHandler = () => {
     setBoard((prev) => {
-      if (isStartOrEnd(currentPoint, start, end)) return prev;
+      if (isStartOrEnd(currentPoint, start, end)) {
+        return prev;
+      }
       const newBoard = deepCopy2DArray(prev.maze);
       newBoard[currentPoint.y][currentPoint.x] = toggleState[block];
       return { ...prev, maze: newBoard };
