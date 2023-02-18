@@ -77,11 +77,11 @@ function backtrack(
 }
 
 function getNextDirection(currentPoint: BlockInterface, prev: BoardInterface) {
-  return (
-    directions.find((direction) =>
-      isValidBlock(nextPoint(currentPoint, direction), prev)
-    ) ?? null
-  );
+  for (const direction of directions) {
+    if (isValidBlock(nextPoint(currentPoint, direction), prev))
+      return direction;
+  }
+  return null;
 }
 
 function currentPointInDFS(stack: BlockInterface[]) {
@@ -94,7 +94,7 @@ function getStack(newBoard: {
   maze: BlockStatusType[][];
   deque: BlockInterface[];
 }) {
-  return [...newBoard.deque];
+  return newBoard.deque;
 }
 
 function deepCopyBoard(prev: BoardInterface): BoardInterface {
