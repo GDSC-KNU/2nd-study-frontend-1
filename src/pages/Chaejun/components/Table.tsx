@@ -65,7 +65,7 @@ function TableRow({
     <tr>
       {row.map((block, blockId) => (
         <TableCell
-          key={"" + rowId + blockId}
+          key={`[${rowId}, ${blockId}]`}
           props={{
             currentPoint: { y: rowId, x: blockId },
             block,
