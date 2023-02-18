@@ -6,14 +6,18 @@ import {
   safeInput,
 } from "../utils/board";
 
+interface Props {
+  label: "columns" | "rows";
+}
+
 export function NumberInput({
   props: { label },
 }: {
-  props: {
-    label: "columns" | "rows";
-  };
+  props: Props;
 }): ReactElement {
-  const { board, setBoard } = useContext(BoardContext) as BoardContextInterface;
+  const { board, setBoard } = {
+    ...useContext(BoardContext),
+  } as BoardContextInterface;
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setBoard((prev) => initializeBoard({ prev, [label]: safeInput(e) }));
