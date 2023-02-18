@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useAlgorithm } from "../hooks/useAlgorithm";
 import { BoardInterface } from "../utils/board";
 
@@ -10,9 +11,10 @@ export function AlgoButton({
 }) {
   const { start, setStart } = useAlgorithm({ callbackFn });
 
-  const buttonStyle = `grow rounded-md border-2 border-black py-2 px-3 text-white ${
+  const buttonStyle = clsx(
+    "grow rounded-md border-2 border-black py-2 px-3 text-white",
     start ? "bg-yellow-400 text-black" : "bg-gray-600"
-  }`;
+  );
 
   const onClickHandler = () => {
     setStart((prev) => !prev);

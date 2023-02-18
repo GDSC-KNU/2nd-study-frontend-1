@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { ReactElement, useContext } from "react";
 import { BoardContext } from "../BoardContext";
 import {
@@ -36,9 +37,11 @@ function TableCell({
 
   const start = { y: 0, x: 0 };
   const end = { y: board.rows - 1, x: board.columns - 1 };
-  const blockClassName = `border-2 border-black ${blockStyle[block]} ${
+  const blockClassName = clsx(
+    "border-2 border-black",
+    blockStyle[block],
     isStartOrEnd(currentPoint, start, end) ? "bg-blue-400" : ""
-  }`;
+  );
 
   const onClickHandler = () => {
     setBoard((prev) => {
