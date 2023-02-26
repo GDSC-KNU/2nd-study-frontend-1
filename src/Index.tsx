@@ -26,16 +26,16 @@ const posts: Array<IPostProps> = [
   {
     title: "Algorithm 3",
     content: "Algorithm 3 visualized by",
-    author: "Minju Kim",
-    githubId: "minju",
-    link: "minju",
+    author: "Dahye Lee",
+    githubId: "leedahye",
+    link: "dahye",
   },
   {
-    title: "Algorithm 4",
-    content: "Algorithm 4 visualized by",
-    author: "Dahye Lee",
-    githubId: "dahye",
-    link: "dahye",
+    title: "Study",
+    content: "Archive of study projects",
+    author: "Team 1",
+    githubId: "orgs/GDSC-KNU/teams/study-frontend-1",
+    link: "src",
   },
 ];
 
