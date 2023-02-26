@@ -4,7 +4,7 @@ const Study = () => {
   return (
     <MainLayout>
       <>
-        <h1 className="mb-6 text-4xl font-bold">Study</h1>
+        <h1 className="mb-6 text-4xl font-bold">Study Projects</h1>
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded border-2 p-4">
             <a href="study/chaejunlee/ProgressBar/">
