@@ -7,15 +7,17 @@ import Study from "./pages/Study";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index path="/" element={<Index />} />
-        <Route path="/chaejunlee" element={<Chaejun />} />
-        <Route path="/hyeonwook" element={<Hyeonwook />} />
-        <Route path="/dahye" element={<Dahye />} />
-        <Route path="/study" element={<Study />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter basename="2nd-study-frontend-1">
+        <Routes>
+          <Route index path="/" element={<Index />} />
+          <Route path="/chaejunlee" element={<Chaejun />} />
+          <Route path="/hyeonwook" element={<Hyeonwook />} />
+          <Route path="/dahye" element={<Dahye />} />
+          <Route path="/study" element={<Study />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
