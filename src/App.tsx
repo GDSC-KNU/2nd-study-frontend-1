@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Index from "./Index";
 import Chaejun from "./pages/Chaejun";
 import Dahye from "./pages/Dahye/Dahye";
@@ -8,7 +8,7 @@ import Study from "./pages/Study";
 function App() {
   return (
     <>
-      <BrowserRouter basename="2nd-study-frontend-1">
+      <HashRouter>
         <Routes>
           <Route index path="/" element={<Index />} />
           <Route path="/chaejunlee" element={<Chaejun />} />
@@ -16,7 +16,7 @@ function App() {
           <Route path="/dahye" element={<Dahye />} />
           <Route path="/study" element={<Study />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }

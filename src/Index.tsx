@@ -14,28 +14,28 @@ const posts: Array<IPostProps> = [
     content: "DFS/BFS visualized by",
     author: "Chaejun Lee",
     githubId: "chaejunlee",
-    link: "chaejunlee",
+    link: "#/chaejunlee",
   },
   {
     title: "Binary Tree",
     content: "Binary Tree visualized by",
     author: "Hyeonwook Jung",
     githubId: "hyeonwook",
-    link: "hyeonwook",
+    link: "#/hyeonwook",
   },
   {
     title: "Sorting",
     content: "Sorting visualized by",
     author: "Dahye Lee",
     githubId: "leedahye",
-    link: "dahye",
+    link: "#/dahye",
   },
   {
     title: "Study Projects",
     content: "Archive of study projects",
     author: "Team 1",
     githubId: "orgs/GDSC-KNU/teams/study-frontend-1",
-    link: "study",
+    link: "#/study",
   },
 ];
 
