@@ -3,7 +3,7 @@ import Index from "./Index";
 import Chaejun from "./pages/Chaejun";
 import Dahye from "./pages/Dahye/Dahye";
 import Hyeonwook from "./pages/Hyeonwook";
-import Minju from "./pages/Minju";
+import Study from "./pages/Study";
 
 function App() {
   return (
@@ -12,8 +12,8 @@ function App() {
         <Route index path="/" element={<Index />} />
         <Route path="/chaejunlee" element={<Chaejun />} />
         <Route path="/hyeonwook" element={<Hyeonwook />} />
-        <Route path="/minju" element={<Minju />} />
         <Route path="/dahye" element={<Dahye />} />
+        <Route path="/study" element={<Study />} />
       </Routes>
     </BrowserRouter>
   );
