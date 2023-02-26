@@ -13,7 +13,7 @@ function App() {
         <Route path="/chaejunlee" element={<Chaejun />} />
         <Route path="/hyeonwook" element={<Hyeonwook />} />
         <Route path="/dahye" element={<Dahye />} />
-        <Route path="/src" element={<Study />} />
+        <Route path="/study" element={<Study />} />
       </Routes>
     </BrowserRouter>
   );

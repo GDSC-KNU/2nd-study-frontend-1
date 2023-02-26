@@ -35,7 +35,7 @@ const posts: Array<IPostProps> = [
     content: "Archive of study projects",
     author: "Team 1",
     githubId: "orgs/GDSC-KNU/teams/study-frontend-1",
-    link: "src",
+    link: "study",
   },
 ];
 
